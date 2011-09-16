@@ -23,6 +23,8 @@ void ZRUser01(float *myState, float *otherState, float time)
 int i;
 float speed;
 float angularVelocity;
+float desiredAngularVelocity;
+float velTarget[3];
 
 if (time < 1) {
     memset(procvar, 0, 13);
@@ -30,6 +32,8 @@ if (time < 1) {
     angleStep = TAU / 6;
     DEBUG(("time, current_radius, angularVelocity, angleTarget\n"));
 }
+
+desiredAngularVelocity = 4.0 * PI / 180;
 
 posTarget[0] = radius * cos(angleTarget);
 posTarget[1] = radius * sin(angleTarget);
@@ -43,7 +47,15 @@ if (sqrt(mathSquare(myState[0] - posTarget[0]) +
     angleTarget += angleStep;
 }
 
-ZRSetPositionTarget(posTarget);
+velTarget[0] = posTarget[0] - myState[0];
+velTarget[1] = posTarget[1] - myState[1];
+velTarget[2] = posTarget[2] - myState[2];
+mathVecNormalize(velTarget, 3);
+velTarget[0] *= radius * desiredAngularVelocity;
+velTarget[1] *= radius * desiredAngularVelocity;
+velTarget[2] *= radius * desiredAngularVelocity;
+
+ZRSetVelocityTarget(velTarget);
 
 // connect radius from center to current position
 for (i = 0; i < 3; i++) {
