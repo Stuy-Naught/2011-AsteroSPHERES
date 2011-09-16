@@ -6,53 +6,60 @@
 #include "spheres_constants.h"
 static float procvar[12];
 static void rotatePoint2(float* point1, float theta, float* newPoint);
- 
+
 //User01: guest3 Team: guest3 Project: centripetal circle
 void ZRUser01(float *myState, float *otherState, float time)
 {
-#define PI  3.141593
+#define PI  3.141593
 #define TAU (2*PI)
- 
-#define posTarget         (&procvar[0])
-#define center            (&procvar[3])
-#define current_radius    (&procvar[6])
-#define radius            (procvar[9])
-#define angleStep         (procvar[10])
-#define currentAngle      (procvar[11])
- 
+ 
+#define posTarget         (&procvar[0])
+#define center            (&procvar[3])
+#define current_radius    (&procvar[6])
+#define radius            (procvar[9])
+#define angleStep         (procvar[10])
+#define angleTarget       (procvar[11])
+
 int i;
- 
+float speed;
+float angularVelocity;
+
 if (time < 1) {
-    memset(procvar, 0, 13);
-    radius = 0.5;
-    angleStep = TAU / 32;
+    memset(procvar, 0, 13);
+    radius = 0.5;
+    angleStep = TAU / 6;
+    DEBUG(("time, current_radius, angularVelocity, angleTarget\n"));
 }
- 
-posTarget[0] = radius * cos(currentAngle);
-posTarget[1] = radius * sin(currentAngle);
- 
+
+posTarget[0] = radius * cos(angleTarget);
+posTarget[1] = radius * sin(angleTarget);
+
+speed = mathVecMagnitude(&myState[3], 3); // magnitude of the velocity vector
+angularVelocity = speed / radius;
+
 if (sqrt(mathSquare(myState[0] - posTarget[0]) +
-         mathSquare(myState[1] - posTarget[1]) +
-         mathSquare(myState[2] - posTarget[2])) < 0.05) {
-    currentAngle += angleStep;
+         mathSquare(myState[1] - posTarget[1]) +
+         mathSquare(myState[2] - posTarget[2])) < 0.05) {
+    angleTarget += angleStep;
 }
- 
+
 ZRSetPositionTarget(posTarget);
- 
+
 // connect radius from center to current position
 for (i = 0; i < 3; i++) {
-    current_radius[i] = myState[i] - center[i];
+     current_radius[i] = myState[i] - center[i];
 }
- 
-DEBUG(("time: %2f\tcurrent_radius: %f,\tcurrentAngle: %f\n",
-       time,
-       mathVecMagnitude(current_radius, 3),
-       currentAngle));
+
+DEBUG(("%f, %f, %f, %f\n",
+       time,
+       mathVecMagnitude(current_radius, 3),
+       angularVelocity,
+       angleTarget));
 }
 void ZRInit01()
 {
-  memset(procvar,0,sizeof(float)*12);
- 
+ memset(procvar,0,sizeof(float)*12);
+
 }
 //User-defined procedures
  
