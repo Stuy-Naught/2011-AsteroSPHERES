@@ -47,7 +47,7 @@ float SphereTarget[3] = {0.0, 0.0, 0.0};
  
 int i;
 for(i = 0; i < 3; i++){
-    SphereTarget[i] = laser1[i];     //laster1[i] can be replaced by any other array to change locations;
+    SphereTarget[i] = laser1_2D[i];     //laster1[i] can be replaced by any other array to change locations;
      
     }
  
