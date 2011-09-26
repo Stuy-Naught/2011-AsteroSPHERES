@@ -104,13 +104,13 @@ void ZRUser01(float *myState, float *otherState, float time)
   }
   if (1 == state) {
     Orbit(center, radius, myState);
-    if(time >= 140) {
+    if(time >= 150) {
       if(readyToLeaveOrbit(myState, center, station1) == 'y')
         state = 2;
       else if(readyToLeaveOrbit(myState, center, station2) == 'y')
         state = 3;
     }
-    if(time >= 154) {    // Just go to closer station
+    if(time >= 160) {    // Just go to closer station
         state = (VDist(myState, station1) < VDist(myState, station2) ? (2) : (3));
     }
   }
@@ -349,25 +349,24 @@ mathVecNormalize(targetVel, 3);
 r = sqrt(mathVecInner(vecToAst, vecToAst, 3));
 
 if(VDist(myState, mPanel) < 0.05){
-    desiredMag = 0;
+    ZRSetPositionTarget(mPanel);
     Plaser();
     DEBUG(("FIRED AT EARTH!"));
 }
 else if(r > 0.6 || VDist(myState, mPanel) < 0.3){
-    desiredMag = (VDist(myState, mPanel) - 0.1) / 20;
+    ZRSetPositionTarget(mPanel);
 }
 else{
     desiredMag = r*3.141592/(45*sinf(Angle(vecToAst, targetVel)));
-}
 
-
-if(desiredMag >= 0.065)
-    desiredMag = 0.065;
+    if(desiredMag >= 0.04)
+        desiredMag = 0.04;
     
-for(i = 0; i < 3; i++)
-    targetVel[i] *= sqrt(desiredMag);   
+    for(i = 0; i < 3; i++)
+       targetVel[i] *= sqrt(desiredMag);   
 
-ZRSetVelocityTarget(targetVel);
+    ZRSetVelocityTarget(targetVel);
+}
 ZRSetAttitudeTarget(earth);
 
 //END::PROC::leaveOrbit
