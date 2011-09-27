@@ -273,11 +273,14 @@ else//opulens
 	ZRSetPositionTarget(laser2);
       }
     }
-    else {
+    else if (!PiceMelted()) {
       float att_target[3];
       ZRSetPositionTarget(opulens);
       VPoint(myState, opulens, att_target);
       ZRSetAttitudeTarget(att_target);
+      if (VAngle(att_target, &myState[6]) <= 12) {
+	Plaser();
+      }
     }
 
     if(actionIsSpin)
