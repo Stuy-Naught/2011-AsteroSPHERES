@@ -1,0 +1,356 @@
+SPH2: Time: 0.000000, Points: 0.000000, Fuel Used: 0.000000
+Time: 1.000000, Points: 0.000000, Fuel Used: 0.692146
+Time: 2.000000, Points: 0.000000, Fuel Used: 1.384285
+Time: 3.000000, Points: 0.000000, Fuel Used: 2.076431
+Time: 4.000000, Points: 0.000000, Fuel Used: 2.794464
+SPH1: Time: 0.000000, Points: 0.000000, Fuel Used: 0.000000
+Time: 1.000000, Points: 0.000000, Fuel Used: 0.921707
+Time: 2.000000, Points: 0.000000, Fuel Used: 1.845139
+Time: 3.000000, Points: 0.000000, Fuel Used: 2.775475
+Time: 4.000000, Points: 0.000000, Fuel Used: 3.710991
+SPH2: Time: 5.000000, Points: 0.000000, Fuel Used: 3.319183
+Time: 6.000000, Points: 0.000000, Fuel Used: 3.655762
+Time: 7.000000, Points: 0.000000, Fuel Used: 3.869789
+Time: 8.000000, Points: 0.000000, Fuel Used: 4.006142
+Time: 9.000000, Points: 0.000000, Fuel Used: 4.080368
+SPH1: Time: 5.000000, Points: 0.000000, Fuel Used: 4.651688
+Time: 6.000000, Points: 0.000000, Fuel Used: 5.602737
+Time: 7.000000, Points: 0.000000, Fuel Used: 6.562416
+Time: 8.000000, Points: 0.000000, Fuel Used: 7.534172
+Time: 9.000000, Points: 0.000000, Fuel Used: 8.518021
+SPH2: Time: 10.000000, Points: 0.000000, Fuel Used: 4.126968
+Time: 11.000000, Points: 0.000000, Fuel Used: 4.171844
+Time: 12.000000, Points: 0.000000, Fuel Used: 4.189102
+Time: 13.000000, Points: 0.000000, Fuel Used: 4.189102
+Time: 14.000000, Points: 0.000000, Fuel Used: 4.189102
+SPH1: Time: 10.000000, Points: 0.000000, Fuel Used: 9.519127
+Time: 11.000000, Points: 0.000000, Fuel Used: 10.471901
+Time: 12.000000, Points: 0.000000, Fuel Used: 10.699738
+Time: 13.000000, Points: 0.000000, Fuel Used: 10.948288
+Time: 14.000000, Points: 0.000000, Fuel Used: 11.495445
+SPH2: Time: 15.000000, Points: 0.000000, Fuel Used: 4.189102
+Time: 16.000000, Points: 0.000000, Fuel Used: 4.189102
+Time: 17.000000, Points: 0.000000, Fuel Used: 4.189102
+Time: 18.000000, Points: 0.000000, Fuel Used: 4.206367
+Time: 19.000000, Points: 0.000000, Fuel Used: 4.206367
+SPH1: Time: 15.000000, Points: 0.000000, Fuel Used: 12.216927
+Time: 16.000000, Points: 0.000000, Fuel Used: 13.024719
+Time: 17.000000, Points: 0.000000, Fuel Used: 13.858398
+Time: 18.000000, Points: 0.000000, Fuel Used: 14.685173
+Time: 19.000000, Points: 0.000000, Fuel Used: 15.477425
+SPH2: Time: 20.000000, Points: 0.000000, Fuel Used: 4.206367
+Time: 21.000000, Points: 0.000000, Fuel Used: 4.206367
+Time: 22.000000, Points: 0.000000, Fuel Used: 4.206367
+Time: 23.000000, Points: 0.000000, Fuel Used: 4.206367
+Time: 24.000000, Points: 0.000000, Fuel Used: 5.065933
+SPH1: Time: 20.000000, Points: 0.000000, Fuel Used: 16.221344
+Time: 21.000000, Points: 0.000000, Fuel Used: 16.901405
+Time: 22.000000, Points: 0.000000, Fuel Used: 17.510704
+Time: 23.000000, Points: 0.000000, Fuel Used: 18.061310
+Time: 24.000000, Points: 0.000000, Fuel Used: 18.549782
+SPH2: Time: 25.000000, Points: 0.000000, Fuel Used: 5.202293
+Time: 26.000000, Points: 0.000000, Fuel Used: 5.323112
+Time: 27.000000, Points: 0.000000, Fuel Used: 5.437035
+Time: 28.000000, Points: 0.000000, Fuel Used: 6.016983
+Time: 29.000000, Points: 0.000000, Fuel Used: 6.094658
+SPH1: Time: 25.000000, Points: 0.000000, Fuel Used: 18.979561
+Time: 26.000000, Points: 0.000000, Fuel Used: 19.357567
+Time: 27.000000, Points: 0.000000, Fuel Used: 19.687241
+Time: 28.000000, Points: 0.000000, Fuel Used: 19.977219
+Time: 29.000000, Points: 0.000000, Fuel Used: 20.229218
+SPH2: Time: 30.000000, Points: 0.000000, Fuel Used: 6.771263
+Time: 31.000000, Points: 0.000000, Fuel Used: 7.318420
+Time: 32.000000, Points: 0.000000, Fuel Used: 7.762016
+Time: 33.000000, Points: 0.000000, Fuel Used: 8.119301
+Time: 34.000000, Points: 0.000000, Fuel Used: 8.606049
+SPH1: Time: 30.000000, Points: 0.000000, Fuel Used: 20.446701
+Time: 31.000000, Points: 0.000000, Fuel Used: 20.634842
+Time: 32.000000, Points: 0.000000, Fuel Used: 20.797089
+Time: 33.000000, Points: 0.000000, Fuel Used: 20.933441
+Time: 34.000000, Points: 0.000000, Fuel Used: 21.054268
+SPH2: Time: 35.000000, Points: 0.000000, Fuel Used: 9.472519
+Time: 36.000000, Points: 0.000000, Fuel Used: 9.712440
+Time: 37.000000, Points: 0.000000, Fuel Used: 10.168114
+Time: 38.000000, Points: 0.000000, Fuel Used: 10.406311
+Time: 39.000000, Points: 0.000000, Fuel Used: 10.820564
+SPH1: Time: 35.000000, Points: 0.000000, Fuel Used: 21.827538
+Time: 36.000000, Points: 0.000000, Fuel Used: 22.058823
+Time: 37.000000, Points: 0.000000, Fuel Used: 22.219345
+Time: 38.000000, Points: 0.000000, Fuel Used: 22.331535
+Time: 39.000000, Points: 0.000000, Fuel Used: 22.409210
+SPH2: Time: 40.000000, Points: 0.000000, Fuel Used: 11.728462
+Time: 41.000000, Points: 0.000000, Fuel Used: 11.987366
+Time: 42.000000, Points: 0.000000, Fuel Used: 12.396439
+Time: 43.000000, Points: 0.000000, Fuel Used: 12.850388
+Time: 44.000000, Points: 0.000000, Fuel Used: 13.242195
+SPH1: Time: 40.000000, Points: 0.000000, Fuel Used: 23.161766
+Time: 41.000000, Points: 0.000000, Fuel Used: 23.455193
+Time: 42.000000, Points: 0.000000, Fuel Used: 23.645058
+Time: 43.000000, Points: 0.000000, Fuel Used: 23.762428
+Time: 44.000000, Points: 0.000000, Fuel Used: 23.829742
+SPH2: Time: 45.000000, Points: 0.000000, Fuel Used: 14.156998
+Time: 46.000000, Points: 0.000000, Fuel Used: 14.424538
+Time: 47.000000, Points: 0.000000, Fuel Used: 14.818077
+Time: 48.000000, Points: 0.000000, Fuel Used: 15.265121
+Time: 49.000000, Points: 0.000000, Fuel Used: 15.665565
+SPH1: Time: 45.000000, Points: 0.000000, Fuel Used: 24.646164
+Time: 46.000000, Points: 0.000000, Fuel Used: 24.984467
+Time: 47.000000, Points: 0.000000, Fuel Used: 25.201950
+Time: 48.000000, Points: 0.000000, Fuel Used: 25.338303
+Time: 49.000000, Points: 0.000000, Fuel Used: 26.068420
+SPH2: Time: 50.000000, Points: 0.000000, Fuel Used: 15.991783
+Time: 51.000000, Points: 0.000000, Fuel Used: 16.402580
+Time: 52.000000, Points: 0.000000, Fuel Used: 17.144783
+Time: 53.000000, Points: 0.000000, Fuel Used: 17.674675
+Time: 54.000000, Points: 0.000000, Fuel Used: 18.132080
+SPH1: Time: 50.000000, Points: 0.000000, Fuel Used: 26.793358
+Time: 51.000000, Points: 0.000000, Fuel Used: 27.513115
+Time: 52.000000, Points: 0.000000, Fuel Used: 28.069763
+Time: 53.000000, Points: 0.000000, Fuel Used: 28.630730
+Time: 54.000000, Points: 0.000000, Fuel Used: 29.005280
+SPH2: Time: 55.000000, Points: 0.000000, Fuel Used: 18.525612
+Time: 56.000000, Points: 0.000000, Fuel Used: 19.398994
+Time: 57.000000, Points: 0.000000, Fuel Used: 19.871925
+Time: 58.000000, Points: 0.000000, Fuel Used: 20.420807
+Time: 59.000000, Points: 0.000000, Fuel Used: 20.812622
+SPH1: Time: 55.000000, Points: 0.000000, Fuel Used: 29.305611
+Time: 56.000000, Points: 0.000000, Fuel Used: 30.400787
+Time: 57.000000, Points: 0.000000, Fuel Used: 30.890121
+Time: 58.000000, Points: 0.000000, Fuel Used: 31.211166
+Time: 59.000000, Points: 0.000000, Fuel Used: 31.418289
+SPH2: Time: 60.000000, Points: 0.084455, Fuel Used: 21.306267
+Time: 61.000000, Points: 0.158049, Fuel Used: 21.629036
+Time: 62.000000, Points: 0.158049, Fuel Used: 22.348801
+Time: 63.000000, Points: 0.240844, Fuel Used: 22.952911
+Time: 64.000000, Points: 0.328127, Fuel Used: 23.451736
+SPH1: Time: 60.000000, Points: 0.097723, Fuel Used: 31.508904
+Time: 61.000000, Points: 0.196378, Fuel Used: 31.577087
+Time: 62.000000, Points: 0.196378, Fuel Used: 32.577324
+Time: 63.000000, Points: 0.295994, Fuel Used: 32.895782
+Time: 64.000000, Points: 0.395954, Fuel Used: 33.157280
+SPH2: Time: 65.000000, Points: 0.397409, Fuel Used: 23.817657
+Time: 66.000000, Points: 0.474613, Fuel Used: 24.304405
+Time: 67.000000, Points: 0.541861, Fuel Used: 24.523613
+Time: 68.000000, Points: 0.541861, Fuel Used: 25.350388
+Time: 69.000000, Points: 0.621578, Fuel Used: 25.850937
+SPH1: Time: 65.000000, Points: 0.495640, Fuel Used: 33.315208
+Time: 66.000000, Points: 0.595051, Fuel Used: 33.405830
+Time: 67.000000, Points: 0.694155, Fuel Used: 33.452431
+Time: 68.000000, Points: 0.694155, Fuel Used: 34.198944
+Time: 69.000000, Points: 0.792964, Fuel Used: 34.544151
+SPH2: Time: 70.000000, Points: 0.684282, Fuel Used: 26.241028
+Time: 71.000000, Points: 0.739487, Fuel Used: 26.460236
+Time: 72.000000, Points: 0.788558, Fuel Used: 26.641464
+Time: 73.000000, Points: 0.827843, Fuel Used: 26.907280
+Time: 74.000000, Points: 0.859730, Fuel Used: 27.123032
+SPH1: Time: 70.000000, Points: 0.891724, Fuel Used: 34.797020
+Time: 71.000000, Points: 0.990433, Fuel Used: 34.919563
+Time: 72.000000, Points: 1.089153, Fuel Used: 35.021400
+Time: 73.000000, Points: 1.187867, Fuel Used: 35.066277
+Time: 74.000000, Points: 1.286580, Fuel Used: 35.083542
+SPH2: Time: 75.000000, Points: 0.859730, Fuel Used: 27.563171
+Time: 76.000000, Points: 0.888275, Fuel Used: 27.721970
+Time: 77.000000, Points: 0.932119, Fuel Used: 28.327812
+Time: 78.000000, Points: 0.989231, Fuel Used: 28.805923
+Time: 79.000000, Points: 0.989231, Fuel Used: 29.662041
+SPH1: Time: 75.000000, Points: 1.286580, Fuel Used: 35.518501
+Time: 76.000000, Points: 1.385289, Fuel Used: 35.665215
+Time: 77.000000, Points: 1.484037, Fuel Used: 35.753242
+Time: 78.000000, Points: 1.582760, Fuel Used: 35.811066
+Time: 79.000000, Points: 1.582760, Fuel Used: 36.546360
+SPH2: Time: 80.000000, Points: 1.066407, Fuel Used: 30.105637
+Time: 81.000000, Points: 1.134310, Fuel Used: 30.404236
+Time: 82.000000, Points: 1.194478, Fuel Used: 30.652786
+Time: 83.000000, Points: 1.248720, Fuel Used: 30.856461
+Time: 84.000000, Points: 1.248720, Fuel Used: 31.628006
+SPH1: Time: 80.000000, Points: 1.681320, Fuel Used: 36.895023
+Time: 81.000000, Points: 1.779869, Fuel Used: 37.153927
+Time: 82.000000, Points: 1.878336, Fuel Used: 37.277340
+Time: 83.000000, Points: 1.976792, Fuel Used: 37.383492
+Time: 84.000000, Points: 1.976792, Fuel Used: 38.180923
+SPH2: Time: 85.000000, Points: 1.297597, Fuel Used: 31.992195
+Time: 86.000000, Points: 1.336952, Fuel Used: 32.287354
+Time: 87.000000, Points: 1.368713, Fuel Used: 32.528999
+Time: 88.000000, Points: 1.415762, Fuel Used: 33.117577
+Time: 89.000000, Points: 1.475811, Fuel Used: 33.606049
+SPH1: Time: 85.000000, Points: 2.075421, Fuel Used: 38.477802
+Time: 86.000000, Points: 2.174133, Fuel Used: 38.699600
+Time: 87.000000, Points: 2.272789, Fuel Used: 38.842861
+Time: 88.000000, Points: 2.371491, Fuel Used: 38.907589
+Time: 89.000000, Points: 2.470202, Fuel Used: 38.955917
+SPH2: Time: 90.000000, Points: 1.475811, Fuel Used: 34.248138
+Time: 91.000000, Points: 1.554476, Fuel Used: 34.805649
+Time: 92.000000, Points: 1.618413, Fuel Used: 35.242340
+Time: 93.000000, Points: 1.670396, Fuel Used: 35.594452
+Time: 94.000000, Points: 1.712829, Fuel Used: 35.879250
+SPH1: Time: 90.000000, Points: 2.470202, Fuel Used: 39.691212
+Time: 91.000000, Points: 2.568762, Fuel Used: 39.982914
+Time: 92.000000, Points: 2.667293, Fuel Used: 40.203846
+Time: 93.000000, Points: 2.765864, Fuel Used: 40.307407
+Time: 94.000000, Points: 2.864461, Fuel Used: 40.391983
+SPH2: Time: 95.000000, Points: 1.752137, Fuel Used: 36.025959
+Time: 96.000000, Points: 1.805019, Fuel Used: 36.619717
+Time: 97.000000, Points: 1.805019, Fuel Used: 37.244545
+Time: 98.000000, Points: 1.854920, Fuel Used: 37.596657
+Time: 99.000000, Points: 1.900049, Fuel Used: 37.822769
+SPH1: Time: 95.000000, Points: 2.963055, Fuel Used: 40.428230
+Time: 96.000000, Points: 3.061647, Fuel Used: 40.445492
+Time: 97.000000, Points: 3.061647, Fuel Used: 41.165253
+Time: 98.000000, Points: 3.160161, Fuel Used: 41.450912
+Time: 99.000000, Points: 3.258853, Fuel Used: 41.588131
+SPH2: Time: 100.000000, Points: 1.956888, Fuel Used: 38.445869
+Time: 101.000000, Points: 2.003162, Fuel Used: 38.687519
+Time: 102.000000, Points: 2.045854, Fuel Used: 38.830780
+Time: 103.000000, Points: 2.045854, Fuel Used: 39.352043
+Time: 104.000000, Points: 2.104909, Fuel Used: 39.968243
+SPH1: Time: 100.000000, Points: 3.357548, Fuel Used: 41.702049
+Time: 101.000000, Points: 3.456246, Fuel Used: 41.767639
+Time: 102.000000, Points: 3.554948, Fuel Used: 41.793530
+Time: 103.000000, Points: 3.554948, Fuel Used: 42.354496
+Time: 104.000000, Points: 3.653515, Fuel Used: 42.571976
+SPH2: Time: 105.000000, Points: 2.157712, Fuel Used: 40.163284
+Time: 106.000000, Points: 2.222025, Fuel Used: 40.681095
+Time: 107.000000, Points: 2.222025, Fuel Used: 41.544117
+Time: 108.000000, Points: 2.301773, Fuel Used: 41.994614
+Time: 109.000000, Points: 2.371166, Fuel Used: 42.234535
+SPH1: Time: 105.000000, Points: 3.752099, Fuel Used: 42.677265
+Time: 106.000000, Points: 3.850690, Fuel Used: 42.773922
+Time: 107.000000, Points: 3.850690, Fuel Used: 43.579121
+Time: 108.000000, Points: 3.949456, Fuel Used: 43.925194
+Time: 109.000000, Points: 4.048192, Fuel Used: 44.195320
+SPH2: Time: 110.000000, Points: 2.449937, Fuel Used: 42.621170
+Time: 111.000000, Points: 2.519968, Fuel Used: 42.914597
+Time: 112.000000, Points: 2.519968, Fuel Used: 43.867371
+Time: 113.000000, Points: 2.603192, Fuel Used: 44.361019
+Time: 114.000000, Points: 2.670908, Fuel Used: 44.839134
+SPH1: Time: 110.000000, Points: 4.147042, Fuel Used: 44.343758
+Time: 111.000000, Points: 4.245833, Fuel Used: 44.447323
+Time: 112.000000, Points: 4.245833, Fuel Used: 45.392330
+Time: 113.000000, Points: 4.344346, Fuel Used: 45.724594
+Time: 114.000000, Points: 4.442853, Fuel Used: 45.967102
+SPH2: Time: 115.000000, Points: 2.748311, Fuel Used: 45.289631
+Time: 116.000000, Points: 2.812370, Fuel Used: 45.747032
+Time: 117.000000, Points: 2.887281, Fuel Used: 46.171638
+Time: 118.000000, Points: 2.887281, Fuel Used: 47.157207
+Time: 119.000000, Points: 2.977830, Fuel Used: 47.737160
+SPH1: Time: 115.000000, Points: 4.541410, Fuel Used: 46.128487
+Time: 116.000000, Points: 4.639944, Fuel Used: 46.200981
+Time: 117.000000, Points: 4.738501, Fuel Used: 46.257938
+Time: 118.000000, Points: 4.738501, Fuel Used: 47.191730
+Time: 119.000000, Points: 4.837129, Fuel Used: 47.547295
+SPH2: Time: 120.000000, Points: 3.072771, Fuel Used: 48.241161
+Time: 121.000000, Points: 3.171876, Fuel Used: 48.679577
+Time: 122.000000, Points: 3.275725, Fuel Used: 49.064484
+Time: 123.000000, Points: 3.275725, Fuel Used: 49.856739
+Time: 124.000000, Points: 3.393916, Fuel Used: 50.731842
+SPH1: Time: 120.000000, Points: 4.935710, Fuel Used: 47.827774
+Time: 121.000000, Points: 5.034376, Fuel Used: 47.979668
+Time: 122.000000, Points: 5.133057, Fuel Used: 48.083229
+Time: 123.000000, Points: 5.133057, Fuel Used: 49.306129
+Time: 124.000000, Points: 5.231936, Fuel Used: 49.717793
+SPH2: Time: 125.000000, Points: 3.520190, Fuel Used: 51.230667
+Time: 126.000000, Points: 3.648341, Fuel Used: 51.703606
+Time: 127.000000, Points: 3.773125, Fuel Used: 52.147198
+Time: 128.000000, Points: 3.896060, Fuel Used: 52.566624
+Time: 129.000000, Points: 3.995214, Fuel Used: 53.170738
+SPH1: Time: 125.000000, Points: 5.330753, Fuel Used: 50.040562
+Time: 126.000000, Points: 5.429361, Fuel Used: 50.249413
+Time: 127.000000, Points: 5.527899, Fuel Used: 50.365059
+Time: 128.000000, Points: 5.626464, Fuel Used: 50.443592
+Time: 129.000000, Points: 5.725026, Fuel Used: 50.474663
+SPH2: Time: 130.000000, Points: 4.074130, Fuel Used: 53.666115
+Time: 131.000000, Points: 4.137077, Fuel Used: 54.068283
+Time: 132.000000, Points: 4.187315, Fuel Used: 54.394505
+Time: 133.000000, Points: 4.248923, Fuel Used: 54.895058
+Time: 134.000000, Points: 4.248923, Fuel Used: 55.780518
+SPH1: Time: 130.000000, Points: 5.823627, Fuel Used: 50.493649
+Time: 131.000000, Points: 5.922229, Fuel Used: 50.493649
+Time: 132.000000, Points: 6.020833, Fuel Used: 50.517815
+Time: 133.000000, Points: 6.119459, Fuel Used: 50.543705
+Time: 134.000000, Points: 6.119459, Fuel Used: 51.386875
+SPH2: Time: 135.000000, Points: 4.324192, Fuel Used: 56.277618
+Time: 136.000000, Points: 4.384993, Fuel Used: 56.717758
+Time: 137.000000, Points: 4.455058, Fuel Used: 57.168255
+Time: 138.000000, Points: 4.512815, Fuel Used: 57.592861
+Time: 139.000000, Points: 4.560441, Fuel Used: 57.941521
+SPH1: Time: 135.000000, Points: 6.217978, Fuel Used: 51.645782
+Time: 136.000000, Points: 6.316557, Fuel Used: 51.855495
+Time: 137.000000, Points: 6.415158, Fuel Used: 51.957333
+Time: 138.000000, Points: 6.513758, Fuel Used: 52.043633
+Time: 139.000000, Points: 6.612353, Fuel Used: 52.081608
+SPH2: Time: 140.000000, Points: 4.599388, Fuel Used: 58.228046
+Time: 141.000000, Points: 4.664418, Fuel Used: 58.942627
+Time: 142.000000, Points: 4.664418, Fuel Used: 59.726250
+Time: 143.000000, Points: 4.664418, Fuel Used: 60.799847
+Time: 144.000000, Points: 4.747600, Fuel Used: 60.799847
+SPH1: Time: 140.000000, Points: 6.710947, Fuel Used: 52.105770
+Time: 141.000000, Points: 6.809622, Fuel Used: 53.087891
+Time: 142.000000, Points: 6.809622, Fuel Used: 53.885323
+Time: 143.000000, Points: 6.809622, Fuel Used: 54.779411
+Time: 144.000000, Points: 6.907620, Fuel Used: 54.779411
+SPH2: Time: 145.000000, Points: 4.826459, Fuel Used: 60.799847
+Time: 146.000000, Points: 4.925184, Fuel Used: 61.781967
+Time: 147.000000, Points: 4.984612, Fuel Used: 62.810688
+Time: 148.000000, Points: 5.043720, Fuel Used: 63.892918
+Time: 149.000000, Points: 5.090471, Fuel Used: 65.040733
+SPH1: Time: 145.000000, Points: 7.005619, Fuel Used: 54.779411
+Time: 146.000000, Points: 7.103718, Fuel Used: 55.500896
+Time: 147.000000, Points: 7.103718, Fuel Used: 56.569317
+Time: 148.000000, Points: 7.103718, Fuel Used: 57.651546
+Time: 149.000000, Points: 7.103718, Fuel Used: 58.369579
+SPH2: Time: 150.000000, Points: 5.090471, Fuel Used: 66.072906
+Time: 151.000000, Points: 5.140645, Fuel Used: 66.072906
+Time: 152.000000, Points: 5.196606, Fuel Used: 66.072906
+Time: 153.000000, Points: 5.258578, Fuel Used: 66.072906
+Time: 154.000000, Points: 5.316624, Fuel Used: 67.025684
+SPH1: Time: 150.000000, Points: 7.103718, Fuel Used: 59.432823
+Time: 151.000000, Points: 7.103718, Fuel Used: 59.432823
+Time: 152.000000, Points: 7.103718, Fuel Used: 59.432823
+Time: 153.000000, Points: 7.103718, Fuel Used: 59.432823
+Time: 154.000000, Points: 7.103718, Fuel Used: 60.323460
+SPH2: Time: 155.000000, Points: 5.371066, Fuel Used: 67.883526
+Time: 156.000000, Points: 5.421995, Fuel Used: 68.625725
+Time: 157.000000, Points: 5.470000, Fuel Used: 69.421431
+Time: 158.000000, Points: 5.518702, Fuel Used: 70.210232
+Time: 159.000000, Points: 5.518702, Fuel Used: 70.731497
+SPH1: Time: 155.000000, Points: 7.103718, Fuel Used: 61.217552
+Time: 156.000000, Points: 7.145682, Fuel Used: 62.484467
+Time: 157.000000, Points: 7.187419, Fuel Used: 63.226665
+Time: 158.000000, Points: 7.226755, Fuel Used: 64.070698
+Time: 159.000000, Points: 7.260912, Fuel Used: 64.364124
+SPH2: Time: 160.000000, Points: 5.518702, Fuel Used: 71.150925
+Time: 161.000000, Points: 5.518702, Fuel Used: 71.689451
+Time: 162.000000, Points: 5.518702, Fuel Used: 72.290113
+Time: 163.000000, Points: 5.518702, Fuel Used: 72.911489
+Time: 164.000000, Points: 5.518702, Fuel Used: 73.515604
+SPH1: Time: 160.000000, Points: 7.289809, Fuel Used: 64.628212
+Time: 161.000000, Points: 7.313713, Fuel Used: 64.975143
+Time: 162.000000, Points: 7.333462, Fuel Used: 65.501587
+Time: 163.000000, Points: 7.349790, Fuel Used: 66.045292
+Time: 164.000000, Points: 7.363635, Fuel Used: 66.563103
+SPH2: Time: 165.000000, Points: 5.518702, Fuel Used: 74.081745
+Time: 166.000000, Points: 5.518702, Fuel Used: 74.596106
+Time: 167.000000, Points: 5.518702, Fuel Used: 75.051781
+Time: 168.000000, Points: 5.518702, Fuel Used: 75.452223
+Time: 169.000000, Points: 5.518702, Fuel Used: 75.804337
+SPH1: Time: 165.000000, Points: 7.363635, Fuel Used: 67.143055
+Time: 166.000000, Points: 7.363635, Fuel Used: 67.615990
+Time: 167.000000, Points: 7.363635, Fuel Used: 68.107912
+Time: 168.000000, Points: 7.363635, Fuel Used: 68.601561
+Time: 169.000000, Points: 7.363635, Fuel Used: 68.957125
+SPH2: Time: 170.000000, Points: 5.518702, Fuel Used: 76.106394
+Time: 171.000000, Points: 5.518702, Fuel Used: 76.361847
+Time: 172.000000, Points: 5.518702, Fuel Used: 76.574150
+Time: 173.000000, Points: 5.518702, Fuel Used: 76.750208
+Time: 174.000000, Points: 5.518702, Fuel Used: 76.888290
+SPH1: Time: 170.000000, Points: 7.363635, Fuel Used: 69.324772
+Time: 171.000000, Points: 7.363635, Fuel Used: 69.661350
+Time: 172.000000, Points: 7.363635, Fuel Used: 69.875380
+Time: 173.000000, Points: 7.363635, Fuel Used: 70.123930
+Time: 174.000000, Points: 7.363635, Fuel Used: 70.343138
+SPH2: Time: 175.000000, Points: 5.518702, Fuel Used: 77.003935
+Time: 176.000000, Points: 7.018702, Fuel Used: 77.104046
+Time: 177.000000, Points: 6.518702, Fuel Used: 77.192074
+SPH1: Time: 175.000000, Points: 7.363635, Fuel Used: 70.481220
+Time: 176.000000, Points: 8.363635, Fuel Used: 70.638290
+
