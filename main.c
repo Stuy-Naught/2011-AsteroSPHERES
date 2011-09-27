@@ -187,6 +187,8 @@ float indigens[3] = {0.0, 0.6, 0.0};
 float opulens[3] = {0.0, -0.6, 0.0};
 float station1[3] = {0.6, 0.0, 0.0};
 float station2[3] = {-0.6, 0.0, 0.0};
+float laser1[3] = {0.4, 0, 0}; 
+float laser2[3] = {-0.4, 0, 0}; 
 float target[3] = {0.0,0.0,0.0};
 float distvec[3] = {0.0, 0.0, 0.0};
 float dist;
@@ -240,6 +242,23 @@ if(asteroidIsIndigens)
 }
 else//opulens
 {
+    if (!PhaveLaser()) {
+      float difference1[3];
+      float difference2[3];
+      float dist1, dist2;
+      
+      mathVecSubtract(difference1, myState, laser1, 3);
+      mathVecSubtract(difference2, myState, laser2, 3);
+      dist1 = mathVecMagnitude(difference1);
+      dist2 = mathVecMagnitude(difference2);
+      if (dist1 < dist2 && PotherHasLaser() != 1) {
+   	ZRSetPositionTarget(laser1);
+      }
+      else if (PotherHasLaser() != 2) {
+	ZRSetPositionTarget(laser2);
+      }
+    }
+
     if(actionIsSpin)
     {
         if(time >= 48)
