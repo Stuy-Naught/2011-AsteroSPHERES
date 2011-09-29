@@ -152,6 +152,7 @@ angleTarget = currentAngle + angleStep;
 
 posTarget[0] = radius * cos(angleTarget) + center[0];
 posTarget[1] = radius * sin(angleTarget) + center[1];
+posTarget[2] = 0;
 
 velTarget[0] = posTarget[0] - myState[0];
 velTarget[1] = posTarget[1] - myState[1];
