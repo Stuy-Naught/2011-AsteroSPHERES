@@ -18,9 +18,9 @@ static void spin (float myState[12]); //DECL::PROC::spin
 static void OrbitDirectionally (float center[3], float radius, float myState[3], int counterclockwise); //DECL::PROC::OrbitDirectionally
 static char readyToLeaveOrbit (float  myState[12], float asteroid[3], float mBase[3]); //DECL::PROC::readyToLeaveOrbit
 static int TangentFinder (float myState[12], float center[3], float radius, float tangentPoint[3], char direction); //DECL::PROC::TangentFinder
-static float timeToMS (float myState[12], float station[3]); //DECL::PROC::timeToMS
-static void leaveOrbit (float myState[12], float asteroid[3], float mPanel[3]); //DECL::PROC::leaveOrbit
 static void doStrategy (char asteroidIsIndigens, char actionIsSpin, char stationIs1, float time, float myState[12]); //DECL::PROC::doStrategy
+static void leaveOrbit (float myState[12], float asteroid[3], float mPanel[3]); //DECL::PROC::leaveOrbit
+static float timeToMS (float myState[12], float station[3]); //DECL::PROC::timeToMS
 
 void ZRUser01(float *myState, float *otherState, float time)
 {
@@ -220,67 +220,6 @@ tangentPoint[1] = myState[1] + (tandist * sin(theta + xangle));
 tangentPoint[2] = 0;
 //END::PROC::TangentFinder
 }
-static float timeToMS (float myState[12], float station[3])
-{
-//BEGIN::PROC::timeToMS
-// distance / average velocity
-// + time to turn around
-float t1, t2, t3, dist;
-float toStation[3];
-float maxAcc = .01;
-
-VSub(station, myState, toStation);
-dist = VLen(toStation);
-t1 = dist / 0.065;
-t2 = VAngle(&myState[3], toStation)/18;
-t3 = (0.05 - VLen(&myState[3])) / maxAcc;
-return t1 + t2 + t3;
-//END::PROC::timeToMS
-}
-static void leaveOrbit (float myState[12], float asteroid[3], float mPanel[3])
-{
-//BEGIN::PROC::leaveOrbit
-float targetVel[3];
-float r;
-float desiredMag;
-float vecToAst[3];
-float att[3];
-float earth[3] = {0,1,0};
-int i;
-
-for(i = 0; i < 3; i++)
-vecToAst[i] = asteroid[i] - myState[i];
-
-
-r = sqrt(mathVecInner(vecToAst, vecToAst, 3));
-
-for(i = 0; i < 3; i++)
-targetVel[i] = mPanel[i] - myState[i];
-
-if(VDist(myState, mPanel) < .1){
-    if(VLen(&myState[3]) > 0.01)
-        desiredMag = 0.002;
-    else
-        desiredMag = 0.01;
-}
-else if(VDist(myState, mPanel) < 0.4)
-    desiredMag = VDist(myState, mPanel)/12;
-else
-    desiredMag = r*3.141592/(45*sin(TAU*VAngle(vecToAst, &myState[3])/360));
-    
-if(desiredMag > 0.06)
-    desiredMag = 0.06;
-
-mathVecNormalize(targetVel, 3);
-
-for(i = 0; i < 3; i++)
-    targetVel[i] *= desiredMag;
-DEBUG(("desiredMag: %.3f", desiredMag));
-ZRSetVelocityTarget(targetVel);
-VPoint(myState, earth, att);
-//ZRSetAttitudeTarget(att);
-//END::PROC::leaveOrbit
-}
 static void doStrategy (char asteroidIsIndigens, char actionIsSpin, char stationIs1, float time, float myState[12])
 {
 //BEGIN::PROC::doStrategy
@@ -300,7 +239,7 @@ if(stationIs1)
 PointsEarned = PgetScore() - Points;
 Points = PgetScore();
 
-DEBUG(("Points: %.3f, Speed: %.3f\n, timeToMS: %.2f", PointsEarned,
+DEBUG(("Points: %.3f, Speed: %.3f, timeToMS: %.2f\n", PointsEarned,
        VLen(&myState[3]), timeToMS(myState, station)));
 
 
@@ -346,4 +285,66 @@ else
     
     
 //END::PROC::doStrategy
+}
+static void leaveOrbit (float myState[12], float asteroid[3], float mPanel[3])
+{
+//BEGIN::PROC::leaveOrbit
+float targetVel[3];
+float r;
+float desiredMag;
+float vecToAst[3];
+float att[3];
+float earth[3] = {0,1,0};
+int i;
+
+for(i = 0; i < 3; i++)
+vecToAst[i] = asteroid[i] - myState[i];
+
+
+r = sqrt(mathVecInner(vecToAst, vecToAst, 3));
+
+for(i = 0; i < 3; i++)
+targetVel[i] = mPanel[i] - myState[i];
+
+if(VDist(myState, mPanel) < .08){
+    if(VLen(&myState[3]) > 0.01)
+        desiredMag = 0.002;
+    else
+        desiredMag = 0.01;
+}
+else if(VDist(myState, mPanel) < 0.25)
+    desiredMag = VDist(myState, mPanel)/12;
+else
+    desiredMag = r*3.141592/(45*sin(TAU*VAngle(vecToAst, &myState[3])/360));
+    
+if(desiredMag > 0.06)
+    desiredMag = 0.06;
+
+mathVecNormalize(targetVel, 3);
+
+for(i = 0; i < 3; i++)
+    targetVel[i] *= desiredMag;
+DEBUG(("desiredMag: %.3f", desiredMag));
+ZRSetVelocityTarget(targetVel);
+VPoint(myState, earth, att);
+//ZRSetAttitudeTarget(att);
+//END::PROC::leaveOrbit
+}
+static float timeToMS (float myState[12], float station[3])
+{
+//BEGIN::PROC::timeToMS
+// distance / average velocity
+// + time to turn around
+float t, dist;
+float toStation[3];
+float maxAcc = .01;
+
+VSub(station, myState, toStation);
+dist = VLen(toStation);
+t = dist / 0.065;
+t += VAngle(&myState[3], toStation)/18;
+t += (0.06 - VLen(&myState[3])) / maxAcc;
+t += 4;
+return t;
+//END::PROC::timeToMS
 }
