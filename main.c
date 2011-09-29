@@ -264,8 +264,8 @@ static void doStrategy (char asteroidIsIndigens, char actionIsSpin, char station
 						  
 						mathVecSubtract(difference1, myState, laser1, 3);
 						mathVecSubtract(difference2, myState, laser2, 3);
-						dist1 = mathVecMagnitude(difference1);
-						dist2 = mathVecMagnitude(difference2);
+						dist1 = mathVecMagnitude(difference1, 3);
+						dist2 = mathVecMagnitude(difference2, 3);
 						if (dist1 < dist2 && PotherHasLaser() != 1)
 							{
 								ZRSetPositionTarget(laser1);
