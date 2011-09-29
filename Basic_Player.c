@@ -18,6 +18,7 @@ static void OrbitDirectionally (float center[3], float radius, float myState[3],
 static char readyToLeaveOrbit (float  myState[12], float asteroid[3], float mBase[3]); //DECL::PROC::readyToLeaveOrbit
 static char TangentFinder (float myState[12], float center[3], float radius, float tangentPoint[3]); //DECL::PROC::TangentFinder
 static void leaveOrbit (float myState[12], float asteroid[3], float mPanel[3]); //DECL::PROC::leaveOrbit
+static int timeToMS (float myState[12], float station[3]); //DECL::PROC::timeToMS
 static void doStrategy (char asteroidIsIndigens, char actionIsSpin, char stationIs1, float time, float myState[12]); //DECL::PROC::doStrategy
 
 void ZRUser01(float *myState, float *otherState, float time)
@@ -252,11 +253,16 @@ VPoint(myState, earth, att);
 ZRSetAttitudeTarget(att);
 //END::PROC::leaveOrbit
 }
+static int timeToMS (float myState[12], float station[3])
+{
+//BEGIN::PROC::timeToMS
+
+//END::PROC::timeToMS
+}
 static void doStrategy (char asteroidIsIndigens, char actionIsSpin, char stationIs1, float time, float myState[12])
 {
 //BEGIN::PROC::doStrategy
-float station1[3] = {0.6, 0.0, 0.0};
-float station2[3] = {-0.6, 0.0, 0.0};
+float station[3] = {-0.6, 0.0, 0.0};
 float target[3] = {0.0,0.0,0.0};
 float distvec[3] = {0.0, 0.0, 0.0};
 float dist;
@@ -265,28 +271,26 @@ float asteroid[3] = {0.0, -0.6, 0.0};
 
 if(asteroidIsIndigens)
     asteroid[1] = 0.6;
+    
+if(stationIs1)
+    station[0] = 0.6;
 
 PointsEarned = PgetScore() - Points;
 
-DEBUG(("Time: %f, Points: %f, Fuel Used: %f\n", time, PointsEarned, (100-PgetPercentFuelRemaining())));
+DEBUG(("Time: %f, Points: %f, Fuel Used: %f, Speed: %f\n", time, PointsEarned,
+       (100-PgetPercentFuelRemaining()), VLen(&myState[3])));
 
 
-if(time >= 150)
+if(time >= 156 && actionIsSpin)
 {
-    if(stationIs1)
-    { 
-        //ZRSetPositionTarget(station1);
-        leaveOrbit(myState, asteroid, station1);
-    }
-    else
-    {
-       // ZRSetPositionTarget(station2);
-        leaveOrbit(myState, asteroid, station2);
-        
-    }
+        //ZRSetPositionTarget(station);
+    leaveOrbit(myState, asteroid, station);
     return;
 }
-
+else if(!actionIsSpin && (timeToMS(station, myState) + time >= 170)){
+    leaveOrbit(myState, asteroid, station);
+    return;
+}
 if(actionIsSpin)
     {
         if(time >= 48)
@@ -309,8 +313,8 @@ if(actionIsSpin)
             OrbitDirectionally(asteroid, 0.40, myState, 0);
         }
     
-        if(readyToLeaveOrbit(myState, asteroid, station1) == 'y' && time >= 135){
-            leaveOrbit(myState, asteroid, station1);
+        if(readyToLeaveOrbit(myState, asteroid, station) == 'y' && time >= 135){
+            leaveOrbit(myState, asteroid, station);
         }
 }
 
