@@ -344,7 +344,7 @@ dist = VLen(toStation);
 t = dist / 0.065;
 t += VAngle(&myState[3], toStation)/18;
 t += (0.06 - VLen(&myState[3])) / maxAcc;
-t += 4;
+t += 8;
 return t;
 //END::PROC::timeToMS
 }
