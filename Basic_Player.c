@@ -12,6 +12,7 @@ void *_start = &_init;
 
 static float TAU; //DECL::VAR::TAU
 static float Points; //DECL::VAR::Points
+static char left; //DECL::VAR::left
 static float Vfunc (int which, float *v1, float *v2, float *vresult, float scalar); //DECL::PROC::Vfunc
 static void spin (float myState[12]); //DECL::PROC::spin
 static void OrbitDirectionally (float center[3], float radius, float myState[3], int counterclockwise); //DECL::PROC::OrbitDirectionally
@@ -45,6 +46,7 @@ void ZRInit01()
 //BEGIN::PROC::ZRInit
 TAU = 6.28318;
 Points = 0.0f;
+left = 0;
 //END::PROC::ZRInit
 }
 //User-defined procedures
@@ -257,7 +259,16 @@ static int timeToMS (float myState[12], float station[3])
 //BEGIN::PROC::timeToMS
 // distance / average velocity
 // + time to turn around
-return 20;
+float t1, t2, t3, dist;
+float toStation[3];
+float maxAcc = .01;
+
+VSub(station, myState, toStation);
+dist = VLen(toStation);
+t1 = dist / 0.05;
+t2 = Angle(&myState[3], toStation)*20/TAU;
+t3 = (0.05 - VLen(&myState[3])) / maxAcc;
+return t1 + t2 + t3;
 //END::PROC::timeToMS
 }
 static void doStrategy (char asteroidIsIndigens, char actionIsSpin, char stationIs1, float time, float myState[12])
@@ -282,14 +293,16 @@ DEBUG(("Time: %f, Points: %f, Fuel Used: %f, Speed: %f\n", time, PointsEarned,
        (100-PgetPercentFuelRemaining()), VLen(&myState[3])));
 
 
-if(time >= 156 && actionIsSpin)
+if((time >= 156 || left) && actionIsSpin)
 {
         //ZRSetPositionTarget(station);
     leaveOrbit(myState, asteroid, station);
+    left = 1;
     return;
 }
-else if(!actionIsSpin && (timeToMS(station, myState) + time >= 170)){
+else if(!actionIsSpin && ((timeToMS(station, myState) + time >= 170) || left)){
     leaveOrbit(myState, asteroid, station);
+    left = 1;
     return;
 }
 if(actionIsSpin)
