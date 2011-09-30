@@ -160,22 +160,20 @@ else
     return 'n';
 //END::PROC::readyToLeaveOrbit
 }
-
-static char TangentFinder (float myState[12], float center[3], float radius, float tangentPoint[3])
+static int TangentFinder (float myState[12], float center[3], float radius, float tangentPoint[3], char direction)
 {
 //BEGIN::PROC::TangentFinder
 float dist, theta, tandist, xangle;
 
 
-dist = sqrt(mathSquare(myState[0] - center[0]) +
-                  mathSquare(myState[1] - center[1]) +
-                  mathSquare(myState[2] - center[2]));
+dist = VDist(myState, center);
 
 
 theta = asin(radius/dist);
 tandist = dist * sin(theta);
 xangle = atan2(center[1] - myState[1], center[0] - myState[0]);
-
+if(direction == 0)//clockwise
+    theta *= -1;
 
 tangentPoint[0] = myState[0] + (tandist * cos(theta + xangle));
 tangentPoint[1] = myState[1] + (tandist * sin(theta + xangle));
@@ -226,12 +224,25 @@ VPoint(myState, earth, att);
 //ZRSetAttitudeTarget(att);
 //END::PROC::leaveOrbit
 }
-static int timeToMS (float myState[12], float station[3])
+static float timeToMS (float myState[12], float station[3])
 {
 //BEGIN::PROC::timeToMS
-return 20;
+// distance / average velocity
+// + time to turn around
+float t, dist;
+float toStation[3];
+float maxAcc = .01;
+
+VSub(station, myState, toStation);
+dist = VLen(toStation);
+t = dist / 0.065;
+t += VAngle(&myState[3], toStation)/18;
+t += (0.06 - VLen(&myState[3])) / maxAcc;
+t += 8;
+return t;
 //END::PROC::timeToMS
 }
+
 static void OrbitDirectionally (float center[3], float radius, float myState[3], int counterclockwise)
 {
 //BEGIN::PROC::OrbitDirectionally
