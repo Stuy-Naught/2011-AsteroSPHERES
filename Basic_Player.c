@@ -10,17 +10,16 @@ extern void _init(void);
 void *_start = &_init;
 #endif
 
-static float TAU; //DECL::VAR::TAU
 static float Points; //DECL::VAR::Points
+static float TAU; //DECL::VAR::TAU
 static char left; //DECL::VAR::left
 static float Vfunc (int which, float *v1, float *v2, float *vresult, float scalar); //DECL::PROC::Vfunc
 static void spin (float myState[12]); //DECL::PROC::spin
+static void TangentFinder (float myState[12], float center[3], float radius, float tangentPoint[3], char direction); //DECL::PROC::TangentFinder
 static void OrbitDirectionally (float center[3], float radius, float myState[3], int counterclockwise); //DECL::PROC::OrbitDirectionally
-static char readyToLeaveOrbit (float  myState[12], float asteroid[3], float mBase[3]); //DECL::PROC::readyToLeaveOrbit
-static int TangentFinder (float myState[12], float center[3], float radius, float tangentPoint[3], char direction); //DECL::PROC::TangentFinder
+static int timeToMS (float myState[12], float station[3]); //DECL::PROC::timeToMS
 static void doStrategy (char asteroidIsIndigens, char actionIsSpin, char stationIs1, float time, float myState[12]); //DECL::PROC::doStrategy
 static void leaveOrbit (float myState[12], float asteroid[3], float mPanel[3]); //DECL::PROC::leaveOrbit
-static float timeToMS (float myState[12], float station[3]); //DECL::PROC::timeToMS
 
 void ZRUser01(float *myState, float *otherState, float time)
 {
@@ -29,7 +28,7 @@ void ZRUser01(float *myState, float *otherState, float time)
 #define VAdd(a, b, result) mathVecAdd(result, (a), (b), 3)  //adds vectors a and b and returns it in result
 #define VSub(a, b, result) mathVecSubtract(result, (a), (b), 3) //subtracts vectors a and b and returns it in result
 #define VUnit(a) mathVecNormalize((a), 3) //turns the vector into a unit vector
-#define VMult(a, b, result) Vfunc(4, (a), NULL, (result), (b) //multiplies vector a by scalar b and returns it in result
+#define VMult(a, b, result) Vfunc(4, (a), NULL, (result), (b)) //multiplies vector a by scalar b and returns it in result
 #define VDot(a, b) mathVecInner((a), (b), 3) //finds dot product of vectors a and b
 #define VCross(a, b, result) mathVecCross(result, (a), (b)) //finds a x b and returns it in result
 #define VDist(a, b) Vfunc(6, (a), (b), NULL, 0) //finds the distance between points a and b (which is just the magnitude of a - b)
@@ -37,7 +36,7 @@ void ZRUser01(float *myState, float *otherState, float time)
 #define VAngle(a, b) Vfunc(8, (a), (b), NULL, 0) //returns the angle between two vectors
 #define VPoint(a, b, result) Vfunc(9, (a), (b), result, 0) //creates a unit vector pointing from point a to point b and returns it in result
 #define VRotate(a, b, result, deg) Vfunc(10, (a), (b), result, deg) //rotates vector a towards vector b by (deg) degrees, result is in result
-
+#define prvect(msg,p) DEBUG(("%s (%f,%f,%f)\n", msg, p[0], p[1], p[2]))
 
 doStrategy(1, 0, 1, time, myState);
 //END::PROC::ZRUser
@@ -45,8 +44,8 @@ doStrategy(1, 0, 1, time, myState);
 void ZRInit01()
 {
 //BEGIN::PROC::ZRInit
-TAU = 6.28318;
 Points = 0.0f;
+TAU = 6.28318;
 left = 0;
 //END::PROC::ZRInit
 }
@@ -127,6 +126,26 @@ dirs[2] = 0;
 ZRSetAttitudeTarget(dirs);
 //END::PROC::spin
 }
+static void TangentFinder (float myState[12], float center[3], float radius, float tangentPoint[3], char direction)
+{
+//BEGIN::PROC::TangentFinder
+float dist, theta, tandist, xangle;
+
+
+dist = VDist(myState, center);
+
+
+theta = asin(radius/dist);
+tandist = dist * sin(theta);
+xangle = atan2(center[1] - myState[1], center[0] - myState[0]);
+if(direction == 0)//clockwise
+    theta *= -1;
+
+tangentPoint[0] = myState[0] + (tandist * cos(theta + xangle));
+tangentPoint[1] = myState[1] + (tandist * sin(theta + xangle));
+tangentPoint[2] = 0;
+//END::PROC::TangentFinder
+}
 static void OrbitDirectionally (float center[3], float radius, float myState[3], int counterclockwise)
 {
 //BEGIN::PROC::OrbitDirectionally
@@ -149,6 +168,7 @@ angleStep *= ((2 * counterclockwise) - 1);
 
 desiredAngularVelocity = TAU / 90;
 
+
 angleTarget = currentAngle + angleStep;
 
 posTarget[0] = radius * cos(angleTarget) + center[0];
@@ -158,67 +178,35 @@ posTarget[2] = 0;
 velTarget[0] = posTarget[0] - myState[0];
 velTarget[1] = posTarget[1] - myState[1];
 velTarget[2] = posTarget[2] - myState[2];
+
 mathVecNormalize(velTarget, 3);
+
 velTarget[0] *= radius * desiredAngularVelocity;
 velTarget[1] *= radius * desiredAngularVelocity;
 velTarget[2] *= radius * desiredAngularVelocity;
 
 ZRSetVelocityTarget(velTarget);
+
 //END::PROC::OrbitDirectionally
 }
-static char readyToLeaveOrbit (float  myState[12], float asteroid[3], float mBase[3])
+static int timeToMS (float myState[12], float station[3])
 {
-//BEGIN::PROC::readyToLeaveOrbit
-float myPos[3];
-float myVel[3];
-float toMBase[3];
-float r;
-float hypotenuse;
-int i;
+//BEGIN::PROC::timeToMS
+// distance / average velocity
+// + time to turn around
+float t, dist;
+float toStation[3];
+float maxAcc = .01;
 
-for(i = 0; i < 3; i++)
-    myPos[i] = myState[i];
-    
-for(; i < 6; i++)
-    myVel[i - 3] = myState[i];
-    
-r = sqrt(mathSquare(asteroid[0] - myPos[0])
-       + mathSquare(asteroid[1] - myPos[1])
-       + mathSquare(asteroid[2] - myPos[2]));
-
-hypotenuse = sqrt(mathSquare(asteroid[0] - mBase[0])
-                + mathSquare(asteroid[1] - mBase[1])
-                + mathSquare(asteroid[2] - mBase[2]));
-    
-mathVecSubtract(toMBase, mBase, myPos, 3);
-
-//If (going in right direction) and (current distance to the mining base == length of tangent line to m base)
-if((mathVecInner(myVel, toMBase, 3) > 0) &&
-   (fabsf(mathVecMagnitude(toMBase, 3) - sqrt(hypotenuse*hypotenuse - r*r)) < 0.01))
-    return 'y';
-else
-    return 'n';
-//END::PROC::readyToLeaveOrbit
-}
-static int TangentFinder (float myState[12], float center[3], float radius, float tangentPoint[3], char direction)
-{
-//BEGIN::PROC::TangentFinder
-float dist, theta, tandist, xangle;
-
-
-dist = VDist(myState, center);
-
-
-theta = asin(radius/dist);
-tandist = dist * sin(theta);
-xangle = atan2(center[1] - myState[1], center[0] - myState[0]);
-if(direction == 0)//clockwise
-    theta *= -1;
-
-tangentPoint[0] = myState[0] + (tandist * cos(theta + xangle));
-tangentPoint[1] = myState[1] + (tandist * sin(theta + xangle));
-tangentPoint[2] = 0;
-//END::PROC::TangentFinder
+VSub(station, myState, toStation);
+dist = VLen(toStation);
+t = dist / 0.065;
+t += VAngle(&myState[3], toStation)/18;
+t += (0.06 - VLen(&myState[3])) / maxAcc;
+t += 8;
+DEBUG(("timeToMS: %.3f\n", t));
+return t;
+//END::PROC::timeToMS
 }
 static void doStrategy (char asteroidIsIndigens, char actionIsSpin, char stationIs1, float time, float myState[12])
 {
@@ -229,6 +217,9 @@ float distvec[3] = {0.0, 0.0, 0.0};
 float dist;
 float PointsEarned;
 float asteroid[3] = {0.0, -0.6, 0.0};
+float laser1[3] = {0.4, 0, 0};
+float laser2[3] = {-0.4, 0, 0};
+
 
 if(asteroidIsIndigens)
     asteroid[1] = 0.6;
@@ -239,51 +230,88 @@ if(stationIs1)
 PointsEarned = PgetScore() - Points;
 Points = PgetScore();
 
-DEBUG(("Points: %.3f, Speed: %.3f, timeToMS: %.2f\n", PointsEarned,
-       VLen(&myState[3]), timeToMS(myState, station)));
+DEBUG(("Time: %.1f, Points: %.3f, Speed: %.4f\n", time, PointsEarned,
+       VLen(&myState[3])));
 
+// Get the laser and shoot at opulens
+if (!asteroidIsIndigens) {
+    if (!PhaveLaser())
+      {
+        float difference1[3];
+        float difference2[3];
+        float dist1, dist2;
+    
+        mathVecSubtract(difference1, myState, laser1, 3);
+    mathVecSubtract(difference2, myState, laser2, 3);
+        dist1 = mathVecMagnitude(difference1, 3);
+        dist2 = mathVecMagnitude(difference2, 3);
+        if (dist1 < dist2 && PotherHasLaser() != 1)
+          {
+            ZRSetPositionTarget(laser1);
+          }
+        else if (PotherHasLaser() != 2)
+          {
+            ZRSetPositionTarget(laser2);
+          }
+      }
+    else if (!PiceMelted())
+      {
+        float att_target[3];
+        float future_pos[3];
+        float me_to_asteroid[3];
+        VMult(&myState[3], 2, future_pos);
+        VAdd(myState, future_pos, future_pos);
+        VPoint(future_pos, asteroid, att_target);
+        ZRSetAttitudeTarget(att_target);
+        
+        VPoint(myState, asteroid, me_to_asteroid);
+        
+        if (VAngle(me_to_asteroid, &myState[6]) <= 6 && time >= 60)
+          {
+            Plaser();
+          }
+      }
+    
+}
 
-if((time >= 156 || left) && actionIsSpin)
-{
-        //ZRSetPositionTarget(station);
-    leaveOrbit(myState, asteroid, station);
-    left = 1;
-    return;
-}
-else if(!actionIsSpin && ((timeToMS(myState, station) + time >= 170) || left)){
-    leaveOrbit(myState, asteroid, station);
-    left = 1;
-    return;
-}
-if(actionIsSpin)
-    {
-        if(time >= 48)
+if (asteroidIsIndigens || PhaveLaser()) {
+    if(actionIsSpin)
         {
-            spin(myState);
+            if(time >= 48 && (asteroidIsIndigens || PiceMelted()))
+            {
+                spin(myState);
+            }
+            ZRSetPositionTarget(asteroid);
+            if(time >= 156)
+            {
+                leaveOrbit(myState, asteroid, station);
+            }
         }
-        ZRSetPositionTarget(asteroid);
+    else
+        {
+            mathVecSubtract(distvec, asteroid, myState, 3);
+            dist = mathVecMagnitude(distvec, 3);
+            if(dist > 0.60 && !left)
+            {
+                TangentFinder(myState, asteroid, 0.40, target, 1);
+                ZRSetPositionTarget(target);
+            }
+            else if (!left)
+            {
+                OrbitDirectionally(asteroid, 0.40, myState, 0);
+            }
+        
+            if(timeToMS(station, myState) + time >= 170 || left){
+                leaveOrbit(myState, asteroid, station);
+                left = 1;
+            }
     }
-else
-    {
-        mathVecSubtract(distvec, asteroid, myState, 3);
-        dist = mathVecMagnitude(distvec, 3);
-        if(dist > 0.40)
-        {
-            TangentFinder(myState, asteroid, 0.40, target, 1);//1 is ccw, 0 is cw
-            ZRSetPositionTarget(target);
-        }
-        else
-        {
-            OrbitDirectionally(asteroid, 0.40, myState, 0);
-        }
-    
-        if(readyToLeaveOrbit(myState, asteroid, station) == 'y' && time >= 135){
-            leaveOrbit(myState, asteroid, station);
-        }
 }
-    
-    
-    
+
+
+
+
+
 //END::PROC::doStrategy
 }
 static void leaveOrbit (float myState[12], float asteroid[3], float mPanel[3])
@@ -306,7 +334,7 @@ r = sqrt(mathVecInner(vecToAst, vecToAst, 3));
 for(i = 0; i < 3; i++)
 targetVel[i] = mPanel[i] - myState[i];
 
-if(VDist(myState, mPanel) < .08){
+if(VDist(myState, mPanel) < .19){
     if(VLen(&myState[3]) > 0.01)
         desiredMag = 0.002;
     else
@@ -314,37 +342,27 @@ if(VDist(myState, mPanel) < .08){
 }
 else if(VDist(myState, mPanel) < 0.25)
     desiredMag = VDist(myState, mPanel)/12;
+else if(VDist(myState, mPanel) < 0.35)
+    desiredMag = VDist(myState, mPanel)/7;
 else
     desiredMag = r*3.141592/(45*sin(TAU*VAngle(vecToAst, &myState[3])/360));
     
-if(desiredMag > 0.06)
-    desiredMag = 0.06;
+if(desiredMag > VDist(myState, mPanel)/6)
+    desiredMag = VDist(myState, mPanel)/6;
 
 mathVecNormalize(targetVel, 3);
 
+if(VDist(myState, mPanel) <= 0.05){
+    DEBUG(("In range of mining station, %.3f\n", VDist(myState, mPanel)));
+}
+
 for(i = 0; i < 3; i++)
     targetVel[i] *= desiredMag;
-DEBUG(("desiredMag: %.3f", desiredMag));
+DEBUG(("desiredMag: %.3f\n", desiredMag));
 ZRSetVelocityTarget(targetVel);
 VPoint(myState, earth, att);
 //ZRSetAttitudeTarget(att);
-//END::PROC::leaveOrbit
-}
-static float timeToMS (float myState[12], float station[3])
-{
-//BEGIN::PROC::timeToMS
-// distance / average velocity
-// + time to turn around
-float t, dist;
-float toStation[3];
-float maxAcc = .01;
 
-VSub(station, myState, toStation);
-dist = VLen(toStation);
-t = dist / 0.065;
-t += VAngle(&myState[3], toStation)/18;
-t += (0.06 - VLen(&myState[3])) / maxAcc;
-t += 8;
-return t;
-//END::PROC::timeToMS
+
+//END::PROC::leaveOrbit
 }
