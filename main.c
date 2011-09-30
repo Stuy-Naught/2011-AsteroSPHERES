@@ -28,7 +28,7 @@ void ZRUser01(float *myState, float *otherState, float time)
 #define VAdd(a, b, result) mathVecAdd(result, (a), (b), 3)  //adds vectors a and b and returns it in result
 #define VSub(a, b, result) mathVecSubtract(result, (a), (b), 3) //subtracts vectors a and b and returns it in result
 #define VUnit(a) mathVecNormalize((a), 3) //turns the vector into a unit vector
-#define VMult(a, b, result) Vfunc(4, (a), NULL, (result), (b) //multiplies vector a by scalar b and returns it in result
+#define VMult(a, b, result) Vfunc(4, (a), NULL, (result), (b)) //multiplies vector a by scalar b and returns it in result
 #define VDot(a, b) mathVecInner((a), (b), 3) //finds dot product of vectors a and b
 #define VCross(a, b, result) mathVecCross(result, (a), (b)) //finds a x b and returns it in result
 #define VDist(a, b) Vfunc(6, (a), (b), NULL, 0) //finds the distance between points a and b (which is just the magnitude of a - b)
@@ -344,9 +344,16 @@ if (!asteroidIsIndigens) {
     else if (!PiceMelted())
       {
         float att_target[3];
-        VPoint(myState, asteroid, att_target);
+        float future_pos[3];
+        float me_to_asteroid[3];
+        VMult(&myState[3], 2, future_pos);
+        VAdd(myState, future_pos, future_pos);
+        VPoint(future_pos, asteroid, att_target);
         ZRSetAttitudeTarget(att_target);
-        if (VAngle(att_target, &myState[6]) <= 6 && time >= 60)
+        
+        VPoint(myState, asteroid, me_to_asteroid);
+        
+        if (VAngle(me_to_asteroid, &myState[6]) <= 6 && time >= 60)
           {
             Plaser();
           }
