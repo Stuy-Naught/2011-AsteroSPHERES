@@ -344,9 +344,16 @@ if (!asteroidIsIndigens) {
     else if (!PiceMelted())
       {
         float att_target[3];
-        VPoint(myState, asteroid, att_target);
+        float future_pos[3];
+        float me_to_asteroid[3];
+        VMult(&myState[3], 2, future_pos);
+        VAdd(myState, future_pos, future_pos);
+        VPoint(future_pos, asteroid, att_target);
         ZRSetAttitudeTarget(att_target);
-        if (VAngle(att_target, &myState[6]) <= 6 && time >= 60)
+        
+        VPoint(myState, asteroid, me_to_asteroid);
+        
+        if (VAngle(me_to_asteroid, &myState[6]) <= 6 && time >= 60)
           {
             Plaser();
           }
