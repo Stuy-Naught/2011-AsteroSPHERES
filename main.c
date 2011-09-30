@@ -333,21 +333,10 @@ if (!asteroidIsIndigens) {
     
 }
 
-if(time >= 156 && actionIsSpin)
-{
-        //ZRSetPositionTarget(station);
-    leaveOrbit(myState, asteroid, station);
-    return;
-}
-else if(!actionIsSpin && (timeToMS(station, myState) + time >= 170)){
-    leaveOrbit(myState, asteroid, station);
-    return;
-}
-
-if (asteroidIsIndigens || PiceMelted()) {
+if (asteroidIsIndigens || PhaveLaser()) {
     if(actionIsSpin)
         {
-            if(time >= 48)
+            if(time >= 48 && (asteroidIsIndigens || PiceMelted()))
             {
                 spin(myState);
             }
@@ -375,6 +364,18 @@ if (asteroidIsIndigens || PiceMelted()) {
                 leaveOrbit(myState, asteroid, station);
             }
     }
+}
+
+// Go to mining station
+if(time >= 156 && actionIsSpin)
+{
+        //ZRSetPositionTarget(station);
+    leaveOrbit(myState, asteroid, station);
+    return;
+}
+else if(!actionIsSpin && (timeToMS(station, myState) + time >= 170)){
+    leaveOrbit(myState, asteroid, station);
+    return;
 }
 //END::PROC::doStrategy
 }
