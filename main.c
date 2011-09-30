@@ -125,11 +125,10 @@ dirs[2] = 0;
 ZRSetAttitudeTarget(dirs);
 //END::PROC::spin
 }
+
 static char readyToLeaveOrbit (float  myState[12], float asteroid[3], float mBase[3])
 {
 //BEGIN::PROC::readyToLeaveOrbit
-#define Angle(v1, v2) acos(mathVecInner((v1), (v2), 3)/(mathVecMagnitude((v1), 3) * mathVecMagnitude((v2), 3)))
-
 float myPos[3];
 float myVel[3];
 float toMBase[3];
@@ -161,6 +160,7 @@ else
     return 'n';
 //END::PROC::readyToLeaveOrbit
 }
+
 static char TangentFinder (float myState[12], float center[3], float radius, float tangentPoint[3])
 {
 //BEGIN::PROC::TangentFinder
@@ -185,9 +185,8 @@ tangentPoint[2] = 0;
 static void leaveOrbit (float myState[12], float asteroid[3], float mPanel[3])
 {
 //BEGIN::PROC::leaveOrbit
-#define Angle(v1, v2) acos(mathVecInner((v1), (v2), 3)/(mathVecMagnitude((v1), 3) * mathVecMagnitude((v2), 3)))
 float targetVel[3];
-float r, t;
+float r;
 float desiredMag;
 float vecToAst[3];
 float att[3];
@@ -200,20 +199,31 @@ vecToAst[i] = asteroid[i] - myState[i];
 
 r = sqrt(mathVecInner(vecToAst, vecToAst, 3));
 
-if(r > .6)
-ZRSetPositionTarget(mPanel);
-else{
-    for(i = 0; i < 3; i++)
-    targetVel[i] = mPanel[i] - myState[i];
-    desiredMag = r*3.141592/(45*sin(Angle(vecToAst, targetVel)));
-    if(desiredMag > 0.05)
-      desiredMag = 0.05;
-    for(i = 0; i < 3; i++)
-    targetVel[i] *= sqrt(desiredMag);
-    ZRSetVelocityTarget(targetVel);
+for(i = 0; i < 3; i++)
+targetVel[i] = mPanel[i] - myState[i];
+
+if(VDist(myState, mPanel) < .08){
+    if(VLen(&myState[3]) > 0.01)
+        desiredMag = 0.002;
+    else
+        desiredMag = 0.01;
 }
+else if(VDist(myState, mPanel) < 0.25)
+    desiredMag = VDist(myState, mPanel)/12;
+else
+    desiredMag = r*3.141592/(45*sin(TAU*VAngle(vecToAst, &myState[3])/360));
+    
+if(desiredMag > 0.06)
+    desiredMag = 0.06;
+
+mathVecNormalize(targetVel, 3);
+
+for(i = 0; i < 3; i++)
+    targetVel[i] *= desiredMag;
+DEBUG(("desiredMag: %.3f", desiredMag));
+ZRSetVelocityTarget(targetVel);
 VPoint(myState, earth, att);
-ZRSetAttitudeTarget(att);
+//ZRSetAttitudeTarget(att);
 //END::PROC::leaveOrbit
 }
 static int timeToMS (float myState[12], float station[3])
