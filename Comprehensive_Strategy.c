@@ -50,6 +50,7 @@ switch((int)time)
     case 66:
         Spin = PisRevolving(otherState) ? 1 : 0;
         break;
+    case 75: if(PinAsteroid(otherState) == 1) asteroid = 1;
 }
 
 
@@ -123,7 +124,7 @@ switch(state)
             mathVecSubtract(difference, myState, opulens, 3);
             if(mathVecMagnitude(difference, 3) > .8)
                 ZRSetPositionTarget(opulens);
-            else
+            else if(!Spin)
                 ZRSetVelocityTarget(zero);
             shoot(myState, opulens, (PgetPhase() > 1));
             return;
@@ -138,7 +139,6 @@ switch(state)
             state = 4;
         break;
     default:
-        DEBUG(("Going to MS%d", (Station[0] > 0)));
         leaveOrbit(myState, Asteroid, Station);
         mathVecSubtract(facing, otherState, myState, 3);
         mathVecNormalize(facing, 3);
