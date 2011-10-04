@@ -1,0 +1,34 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 ArialMT;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww9000\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\ql\qnatural
+
+\f0\fs28\fsmilli14400 \cf0 README\
+________________________________________________________\
+\
+Vinay and Rene's submission: Comprehensive_Strategy.c (Github),\
+orbit bot optimizing further (IDE)\
+\
+Mikhail's Orbit Bot Best, plus spinning, if the opponent is revolving at\
+the asteroid you are on at 61 or 66 seconds.\
+\
+Communication to decide which mining station, which asteroid, with a\
+limit to the number of times it can switch (bombardment-proof), and\
+fully functional without receiving communication.  Is always honest.\
+\
+Uses leaveOrbit and timeToMS to exit orbit/spin, while using tractor\
+beam to repel opponent.\
+\
+Switches asteroids only if opponent is spinning properly on Opulens\
+and you are on Indigens.\
+\
+Gets laser->disruptor upgrade->shield if possible at the beginning.\
+\
+Problems: loses charge quickly, loses fuel if collision avoidance\
+activates a lot.\
+\
+The current code size is 107%, but we have not optimized any of the\
+new code. \'a0We will most likely simplify leaveOrbit, or get rid of it if there\
+is something else we need to add.}
