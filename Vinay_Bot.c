@@ -193,7 +193,7 @@ switch(state)
         if(((((mathVecMagnitude(difference, 3) / 0.08) + 
             (acos(mathVecInner(&myState[3], difference, 3)/(mathVecMagnitude(&myState[3],3)*mathVecMagnitude(difference,3)))*10/PI) +
             ((0.08 - mathVecMagnitude(&myState[3], 3)) / .01) +
-            4.0) > 168.0 - time) && action) || (time > 150 && !action))
+            4.0) > 168.0 - time) && action) || (time > 153 && !action))
             state++;
         break;
     
