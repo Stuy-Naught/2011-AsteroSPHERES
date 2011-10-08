@@ -12,7 +12,7 @@ void *_start = &_init;
 
 static unsigned char state; //DECL::VAR::state
 static unsigned char SphereNumber; //DECL::VAR::SphereNumber
-static char action; //DECL::VAR::action
+static char shouldOrbit; //DECL::VAR::action
 static char switchTimer; //DECL::VAR::switchTimer
 static char cooloff; //DECL::VAR::cooloff
 static void orbit (float myState[12], float center[3], unsigned char CCW); //DECL::PROC::orbit
@@ -39,15 +39,16 @@ Station[0] = (SphereNumber == 1) ? 0.6 : -0.6;
 Laser[0] = ((SphereNumber == 1) - (PotherHasLaser() == SphereNumber)) ? 0.4 : -0.4;
 
 
-  if((int)PgetMessage() & 0x0400)
+  // Following y0b0tics mining guild protocol
+  PsendMessage(1 << 10); // we can do everything (bit 11 turned on)
+
+  if((int)PgetMessage() & 0x0400) // they can do everything (bit 11 turned on)
     {
-      op = 1;
-      action = SphereNumber % 2;
+      shouldOrbit = SphereNumber % 2; // SPH1 orbits, SPH2 spins
     }
-  else if((int)PgetMessage() & 0x0200)
+  else if((int)PgetMessage() & 0x0200) // they can't do something
     {
-      op = 1;
-      action = 1;
+      shouldOrbit = 1; // we get to orbit!
     }
   
 
@@ -67,14 +68,14 @@ switch(state)
         {
             if(time > 120)
             {
-                action = 0;
+                shouldOrbit = 0;
             }
             switchTimer = 10;
             cooloff = 8;
         }
         if(switchTimer == 15)
         {
-            action = 1;
+            shouldOrbit = 1;
             switchTimer = 0;
             cooloff = 8;
         }
@@ -84,7 +85,7 @@ switch(state)
             cooloff--;
         }
         
-        if(action)
+        if(orbit)
         {
             if(!cooloff)
             {
@@ -164,7 +165,7 @@ void ZRInit01()
 //BEGIN::PROC::ZRInit
 state = 0;
 SphereNumber = 0;
-action = 1;
+shouldOrbit = 1;
 switchTimer = 0;
 cooloff = 0;
 //END::PROC::ZRInit
