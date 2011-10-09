@@ -29,7 +29,7 @@ void ZRUser01(float *myState, float *otherState, float time)
 #define dirs        Laser
 
   float opulens[3] = {0.0, -0.6, 0.0};
-  float opulens_tangent[3] = {0.4, -0.6, 0.0};
+  float opulens_tangent[3] = {0.45, -0.6, 0.0};
   float opulens_spin_point[3] = {0.04, -0.6, 0.0};
   float Laser[3] = {0.4, 0.0, 0.0};
   float zero[3] = {0.0, 0.0, 0.0};
@@ -159,19 +159,19 @@ void ZRUser01(float *myState, float *otherState, float time)
 					  
 
 
-	  if (mathVecMagnitude(difference, 3) < 0.42) {
+	  if (mathVecMagnitude(difference, 3) < 0.6) {
 	    theta = atan2f(difference[1],difference[0]);
 	    thetastep = -0.070996444; // TAU / 88.5, zach's magic value
 	    theta += thetastep;
-	    difference[0] = .4 * sinf(PI/2 - theta);
-	    difference[1] = .4 * sinf(theta);
+	    difference[0] = .45 * sinf(PI/2 - theta);
+	    difference[1] = .45 * sinf(theta);
 	    mathVecAdd(target, Asteroid, difference, 3); // target is new position 
 	    mathVecSubtract(difference, target, myState, 3); // difference points from myState to target 
 	    ZRSetVelocityTarget(difference); 
 	  }
 	  else { // go to tangent point in beginning of orbit
 	    // TODO: re-calculate tangent point
-	    opulens_tangent[0] = (SphereNumber == 1) ? 0.4 : -0.4; // stay on our starting side
+	    opulens_tangent[0] *= (SphereNumber == 1) ? 1 : -1; // stay on our starting side
 	    ZRSetPositionTarget(opulens_tangent);
 	  }				  
 	}
