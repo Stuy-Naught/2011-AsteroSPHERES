@@ -211,43 +211,6 @@ void ZRUser01(float *myState, float *otherState, float time)
 						  
 	    ZRSetPositionTarget(Asteroid);
 	  }
-				  
-	// When to go to mining station
-	/*if(((((mathVecMagnitude(difference, 3) / 0.07) + 
-	  (acos(mathVecInner(&myState[3], difference, 3)/(mathVecMagnitude(&myState[3],3)*mathVecMagnitude(difference,3)))*10/PI) +
-	  ((0.08 - mathVecMagnitude(&myState[3], 3)) / .01) +
-	  7.0) + time >= 168.0) && action)
-	  || (time > 153 && !action))
-	  state++;
-	*/
-	break;
-				    
-      default:
-			  
-	mathVecSubtract(difference, Asteroid, myState, 3);
-	mathVecSubtract(target, Station, myState, 3);
-			      
-	dist = mathVecMagnitude(target, 3);
-				
-	if(dist < .19)
-	  mag = (mathVecMagnitude(&myState[3], 3) > 0.01) ? 0.002 : 0.01;
-	else if(dist < 0.33)
-	  mag = dist/14;
-	else{
-	  mathVecCross(temp, difference, &myState[3]);
-	  mag = mathVecMagnitude(difference, 3)*3.141592/(45*mathVecMagnitude(temp, 3));
-	}
-				  
-	mag = (mag > dist/8.5) ? dist/8.5 : mag;
-	mag = (mag > 0.08) ? 0.08 : mag;
-				      
-	mathVecNormalize(target, 3);
-					
-	target[0] *= mag;
-	target[1] *= mag;
-					    
-	ZRSetVelocityTarget(target);
-					      
 	break;
       }
 
