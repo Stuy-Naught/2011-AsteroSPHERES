@@ -212,7 +212,7 @@ void ZRUser01(float *myState, float *otherState, float time)
 						
 	  ZRSetAttitudeTarget(dirs);
 						  
-	  ZRSetPositionTarget(Asteroid);
+	  ZRSetPositionTarget(opulens_spin_point);
 	}
       break;
     }
