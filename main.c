@@ -199,7 +199,6 @@ void ZRUser01(float *myState, float *otherState, float time)
 
 	  if(!(PiceMelted()) && op)
 	    {
-	      float opulens_spin_point[3];
 	      opulens_spin_point[0] = (SphereNumber == 1) ? 0.04 : -0.04;
 	      ZRSetPositionTarget(opulens_spin_point);
 	      shoot(myState, opulens, (PgetPhase() > 1));
