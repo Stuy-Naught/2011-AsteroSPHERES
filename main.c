@@ -216,13 +216,14 @@ switch(state)
             ZRSetPositionTarget(Asteroid);
         }
         
-        if(((((mathVecMagnitude(difference, 3) / 0.07) + 
+	  // When to go to mining station
+	  /*if(((((mathVecMagnitude(difference, 3) / 0.07) + 
             (acos(mathVecInner(&myState[3], difference, 3)/(mathVecMagnitude(&myState[3],3)*mathVecMagnitude(difference,3)))*10/PI) +
             ((0.08 - mathVecMagnitude(&myState[3], 3)) / .01) +
             7.0) + time >= 168.0) && action)
             || (time > 153 && !action))
             state++;
-            
+            */
         break;
     
     default:
