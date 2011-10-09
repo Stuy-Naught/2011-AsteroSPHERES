@@ -12,45 +12,87 @@ void *_start = &_init;
 
 static unsigned char state; //DECL::VAR::state
 static unsigned char SphereNumber; //DECL::VAR::SphereNumber
-static char shouldOrbit; //DECL::VAR::action
+static char action; //DECL::VAR::action
 static char switchTimer; //DECL::VAR::switchTimer
 static char cooloff; //DECL::VAR::cooloff
-static void orbit (float myState[12], float center[3], unsigned char CCW); //DECL::PROC::orbit
+static float Station[3]; //DECL::VAR::Station
+static float Asteroid[3]; //DECL::VAR::Asteroid
+static char switchedStation; //DECL::VAR::switchedStation
+static char op; //DECL::VAR::op
 static void shoot (float myState[12], float target[3], unsigned int fire); //DECL::PROC::shoot
-static void spin (float myState[12]); //DECL::PROC::spin
 
 void ZRUser01(float *myState, float *otherState, float time)
 {
 //BEGIN::PROC::ZRUser
+#define thetastep   dist
+#define theta       mag
+#define dirs        Laser
+
 float opulens[3] = {0.0, -0.6, 0.0};
 float Laser[3] = {0.4, 0.0, 0.0};
 float zero[3] = {0.0, 0.0, 0.0};
-float difference[3];
-float Asteroid[3] = {0.0, -0.6, 0.0};
-float Station[3] = {0.0, 0.0, 0.0};
+float difference[3], target[3], temp[3];
+float dist, mag;
+
 
 
 if(!time)
 {
     SphereNumber = !!(myState[0] < 0) + 1;
+    Station[0] = (SphereNumber == 1) ? 0.6 : -0.6;
 }
 
-Station[0] = (SphereNumber == 1) ? 0.6 : -0.6;
 Laser[0] = ((SphereNumber == 1) - (PotherHasLaser() == SphereNumber)) ? 0.4 : -0.4;
 
+if((time > 130) && (switchedStation == 0 || switchedStation > 2) && !(state > 1)){
+    mathVecSubtract(difference, Station, otherState, 3);
+    temp[0] = mathVecInner(&otherState[3], difference, 3) / (mathVecMagnitude(&otherState[3], 3) * mathVecMagnitude(difference, 3));
+    Station[1] *= -1;
+    mathVecSubtract(difference, Station, otherState, 3);
+    temp[1] = mathVecInner(&otherState[3], difference, 3) / (mathVecMagnitude(&otherState[3], 3)* mathVecMagnitude(difference, 3));
+    if(temp[1] < temp[0])
+        Station[1] *= -1;
+}
 
-  // Following y0b0tics mining guild protocol
-  PsendMessage(1 << 10); // we can do everything (bit 11 turned on)
 
-  if((int)PgetMessage() & 0x0400) // they can do everything (bit 11 turned on)
-    {
-      shouldOrbit = SphereNumber % 2; // SPH1 orbits, SPH2 spins
-    }
-  else if((int)PgetMessage() & 0x0200) // they can't do something
-    {
-      shouldOrbit = 1; // we get to orbit!
-    }
-  
+switch((int)PgetMessage())
+{
+    case 6:
+        if(!(Station[0] < 0.0) && switchedStation++ < 3)
+            Station[0] = -0.6;
+        break;
+    case 7:
+        if(!(Station[0] > 0.0) && switchedStation++ < 3)
+            Station[0] = 0.6;
+        break;
+    case 2:
+    case 3:
+        if(time < 40)
+            op = 1;
+        break;
+    case 4:
+    case 5:
+        if(time < 40)
+            op = 0;
+        break;
+    default:
+        if(((int)PgetMessage() & 0x0400) && (time < 40)) // y0b0tics: both of us are fully capable, so SPH1 orbits, SPH2 spins
+        {
+            op = 1;
+            action = SphereNumber % 2;
+        }
+        else if(((int)PgetMessage() & 0x0200) && (time < 40)) // y0b0tics: they're not as capable, so we orbit
+           // not specific enough, delta mk2 should tell us exactly what they can/cannot do
+        {
+            op = 1;
+            action = 1;
+        }
+        break;
+}
+
+PsendMessage(0x0400); // y0b0tics: "I can do everything"
+
+Asteroid[1] = (op) ? -0.6 : 0.6;
 
 switch(state)
 {
@@ -68,14 +110,14 @@ switch(state)
         {
             if(time > 120)
             {
-                shouldOrbit = 0;
+                action = 0;
             }
             switchTimer = 10;
             cooloff = 8;
         }
         if(switchTimer == 15)
         {
-            shouldOrbit = 1;
+            action = 1;
             switchTimer = 0;
             cooloff = 8;
         }
@@ -85,11 +127,11 @@ switch(state)
             cooloff--;
         }
         
-        if(orbit)
+        if(action)
         {
             if(!cooloff)
             {
-                if(PisRevolving(otherState) == 1)
+                if(PisRevolving(otherState) == 2 - op)
                 {
                     if(switchTimer < 5 && switchTimer >= 0)
                     {
@@ -106,27 +148,40 @@ switch(state)
                 }
             }
             
-            if(!(PiceMelted()))
+            mathVecSubtract(difference, myState, Asteroid, 3);
+            
+            if((!PiceMelted()) && op)
             {
-                mathVecSubtract(difference, myState, opulens, 3);
                 if(mathVecMagnitude(difference, 3) > .6)
                 {
-                    ZRSetPositionTarget(opulens);
+                    ZRSetPositionTarget(Asteroid);
                 }
                 else
                 {
+                    
                     ZRSetVelocityTarget(zero);
                 }
                 shoot(myState, opulens, (PgetPhase() > 1));
                 return;
             }
-            orbit(myState, Asteroid, 1);
+            
+            theta = atan2f(difference[1],difference[0]);
+            
+            thetastep = -0.66;
+            
+            theta += thetastep;
+            difference[0] = .4 * sinf(PI/2 - theta);
+            difference[1] = .4 * sinf(theta);
+            mathVecAdd(target, Asteroid, difference, 3);
+            ZRSetPositionTarget(target);
+            
         }
         else
         {
             if(!cooloff)
             {
-                if(PinAsteroid(otherState) == 1)
+                mathVecSubtract(temp, otherState, Asteroid, 3);
+                if((PinAsteroid(otherState) == 2 - op) || ((mathVecMagnitude(temp, 3) < .2) && (fabsf(otherState[11]) > PI/12)))
                 {
                     if(switchTimer < 15 && switchTimer >= 10)
                     {
@@ -143,19 +198,58 @@ switch(state)
                 }
             }
             
-            if(!(PiceMelted()))
+            if(!(PiceMelted()) && op)
             {
                 ZRSetPositionTarget(opulens);
                 shoot(myState, opulens, (PgetPhase() > 1));
                 return;
             }
-            spin(myState);
-            ZRSetPositionTarget(opulens);
+            
+            dirs[2] = 1.872459067 + atan2f(myState[7], myState[6]);
+            dirs[0] = sinf(PI/2 - dirs[2]);
+            dirs[1] = sinf(dirs[2]);
+            dirs[2] = 0;
+            
+            ZRSetAttitudeTarget(dirs);
+            
+            ZRSetPositionTarget(Asteroid);
         }
+        
+        if(((((mathVecMagnitude(difference, 3) / 0.07) + 
+            (acos(mathVecInner(&myState[3], difference, 3)/(mathVecMagnitude(&myState[3],3)*mathVecMagnitude(difference,3)))*10/PI) +
+            ((0.08 - mathVecMagnitude(&myState[3], 3)) / .01) +
+            7.0) + time >= 168.0) && action)
+            || (time > 153 && !action))
+            state++;
+            
         break;
     
     default:
-        ZRSetPositionTarget(Station);
+    
+        mathVecSubtract(difference, Asteroid, myState, 3);
+        mathVecSubtract(target, Station, myState, 3);
+
+        dist = mathVecMagnitude(target, 3);
+
+        if(dist < .19)
+            mag = (mathVecMagnitude(&myState[3], 3) > 0.01) ? 0.002 : 0.01;
+        else if(dist < 0.33)
+            mag = dist/14;
+        else{
+            mathVecCross(temp, difference, &myState[3]);
+            mag = mathVecMagnitude(difference, 3)*3.141592/(45*mathVecMagnitude(temp, 3));
+        }
+    
+        mag = (mag > dist/8.5) ? dist/8.5 : mag;
+        mag = (mag > 0.08) ? 0.08 : mag;
+
+        mathVecNormalize(target, 3);
+
+        target[0] *= mag;
+        target[1] *= mag;
+
+        ZRSetVelocityTarget(target);
+
         break;
 }
 //END::PROC::ZRUser
@@ -165,32 +259,16 @@ void ZRInit01()
 //BEGIN::PROC::ZRInit
 state = 0;
 SphereNumber = 0;
-shouldOrbit = 1;
+action = 1;
 switchTimer = 0;
 cooloff = 0;
+memset(Station,0,sizeof(float)*3);
+memset(Asteroid,0,sizeof(float)*3);
+switchedStation = 0;
+op = 1;
 //END::PROC::ZRInit
 }
 //User-defined procedures
-static void orbit (float myState[12], float center[3], unsigned char CCW)
-{
-//BEGIN::PROC::orbit
-float difference[3], target[3];
-float theta;
-float thetastep = .66;
-
-mathVecSubtract(difference, myState, center, 3);
-theta = atan2f(difference[1],difference[0]);
-
-if(CCW)
-    thetastep *= -1;
-
-theta += thetastep;
-difference[0] = .4 * sinf(PI/2 - theta);
-difference[1] = .4 * sinf(theta);
-mathVecAdd(target, center, difference, 3);
-ZRSetPositionTarget(target);
-//END::PROC::orbit
-}
 static void shoot (float myState[12], float target[3], unsigned int fire)
 {
 //BEGIN::PROC::shoot
@@ -201,19 +279,7 @@ mathVecNormalize(direction, 3);
 
 ZRSetAttitudeTarget(direction);
 
-if (fire && (fabsf(mathVecInner(&myState[6], direction, 3) / mathVecMagnitude(&myState[6], 3)) > (0.995)))
+if (fire && (mathVecInner(&myState[6], direction, 3) / mathVecMagnitude(&myState[6], 3)) > (0.995))
     Plaser();
 //END::PROC::shoot
-}
-static void spin (float myState[12])
-{
-//BEGIN::PROC::spin
-float dirs[3];
-dirs[2] = 1.872459067 + atan2f(myState[7], myState[6]);
-dirs[0] = sinf(PI/2 - dirs[2]);
-dirs[1] = sinf(dirs[2]);
-dirs[2] = 0;
-
-ZRSetAttitudeTarget(dirs);
-//END::PROC::spin
 }
