@@ -167,13 +167,14 @@ switch(state)
             
             theta = atan2f(difference[1],difference[0]);
             
-            thetastep = -0.66;
+	      thetastep = -0.070996444; // TAU / 88.5, zach's magic value
             
             theta += thetastep;
             difference[0] = .4 * sinf(PI/2 - theta);
             difference[1] = .4 * sinf(theta);
-            mathVecAdd(target, Asteroid, difference, 3);
-            ZRSetPositionTarget(target);
+	      mathVecAdd(target, Asteroid, difference, 3); // target is new position 
+	      mathVecSubtract(difference, target, myState, 3); // difference points from myState to target 
+            ZRSetVelocityTarget(difference); 
             
         }
         else
@@ -252,6 +253,12 @@ switch(state)
 
         break;
 }
+
+if (time < 1) {
+  DEBUG(("time, score\n"));
+}
+DEBUG(("%f, %f\n", time, PgetScore()));
+
 //END::PROC::ZRUser
 }
 void ZRInit01()
