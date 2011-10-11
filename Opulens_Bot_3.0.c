@@ -15,10 +15,12 @@ static unsigned char SphereNumber; //DECL::VAR::SphereNumber
 static char action; //DECL::VAR::action
 static char switchTimer; //DECL::VAR::switchTimer
 static char cooloff; //DECL::VAR::cooloff
-static float Station[3]; //DECL::VAR::Station
 static float Asteroid[3]; //DECL::VAR::Asteroid
-static char switchedStation; //DECL::VAR::switchedStation
 static char op; //DECL::VAR::op
+static char y0received; //DECL::VAR::y0received
+static int lastMessage; //DECL::VAR::lastMessage
+static int gotToTangent; //DECL::VAR::gotToTangent
+static float Station[3]; //DECL::VAR::Station
 static void shoot (float myState[12], float target[3], unsigned int fire); //DECL::PROC::shoot
 
 void ZRUser01(float *myState, float *otherState, float time)
@@ -32,50 +34,29 @@ void ZRUser01(float *myState, float *otherState, float time)
   float opulens_tangent[3] = {0.45, -0.6, 0.0};
   float opulens_spin_point[3] = {0.04, -0.6, 0.0};
   float Laser[3] = {0.4, 0.0, 0.0};
-  float difference[3], target[3], temp[3];
-  float dist, mag;
+  float difference[3], target[3];
+  float dist, mag, tandist, xangle;
   
   if(!time)
     {
       SphereNumber = !!(myState[0] < 0) + 1;
-      Station[0] = (SphereNumber - 1) ? 0.6 : -0.6;
-      DEBUG(("time, score\n"));
     }
-  DEBUG(("%f, %f\n", time, PgetScore()));
 
   Laser[0] = ((SphereNumber == 1) - (PotherHasLaser() == SphereNumber)) ? 0.4 : -0.4;
   
-  /*
-  if((time > 130) && (switchedStation == 0 || switchedStation > 2) && !(state > 1)){
-    mathVecSubtract(difference, Station, otherState, 3);
-    temp[0] = mathVecInner(&otherState[3], difference, 3) / (mathVecMagnitude(&otherState[3], 3) * mathVecMagnitude(difference, 3));
-    Station[0] *= -1;
-    mathVecSubtract(difference, Station, otherState, 3);
-    temp[1] = mathVecInner(&otherState[3], difference, 3) / (mathVecMagnitude(&otherState[3], 3)* mathVecMagnitude(difference, 3));
-    if(temp[1] < temp[0])
-      Station[0] *= -1;
-  }
-  */
-  
-  
-  switch((int)PgetMessage())
+  if((int)PgetMessage())
+      lastMessage = (int)PgetMessage();
+    
+  switch(lastMessage)
     {
-    case 6:
-      if(!(Station[0] < 0.0) && switchedStation++ < 3)
-    Station[0] = -0.6;
-      break;
-    case 7:
-      if(!(Station[0] > 0.0) && switchedStation++ < 3)
-	Station[0] = 0.6;
-      break;
     case 2:
     case 3:
-      if(time < 40)
+      if((time < 20) && !y0received && (time))
 	op = 1;
       break;
     case 4:
     case 5:
-      if(time < 40)
+      if((time < 20) && !y0received && (time))
 	op = 0;
       break;
     default:
@@ -83,34 +64,37 @@ void ZRUser01(float *myState, float *otherState, float time)
 	{
 	  op = 1;
 	  action = SphereNumber % 2;
+      y0received = 1;
 	}
       else if(((int)PgetMessage() & 0x0200) && (time < 40)) // y0b0tics: they're not as capable, so we orbit
 	// not specific enough, delta mk2 should tell us exactly what they can/cannot do
 	{
 	  op = 1;
 	  action = 1;
+      y0received = 1;
 	}
       break;
     }
-		    
-  PsendMessage(0x0400); // y0b0tics: "I can do everything"
-
+    
+  if(!time || y0received)
+      PsendMessage(0x0400); // y0b0tics: "I can do everything"
+  else if(time == 1)
+      PsendMessage((unsigned short)(3)); // I will orbit on Opulens
+  else
+      PsendMessage((unsigned short)(4 - (2 * op) + action));
+    
   Asteroid[1] = (op) ? -0.6 : 0.6;
-  
 		      
-  switch(state)
-    {
-    case 0:
+if(!state){
       ZRSetPositionTarget(Laser);
       shoot(myState, opulens, 0);
       if(PhaveLaser() || PgetPhase() == 2)
 	{
 	  state = 1;
 	}
-      break;
-				  
-    case 1:
-      if(switchTimer == 5)
+}
+else{
+    if(switchTimer == 5)
 	{
 	  if(time < 130)
 	    {
@@ -130,15 +114,17 @@ void ZRUser01(float *myState, float *otherState, float time)
 	}
 			      
       if(cooloff)
-	{
-	  cooloff--;
-	}
+	    {
+	    cooloff--;
+	    }
 				
       if(action)
-	{
+	    {
 	  if(!cooloff)
 	    {
-	      if(PisRevolving(otherState) == 2 - op)
+          mathVecSubtract(difference, Asteroid, otherState, 3);
+          mathVecNormalize(difference, 3);
+	      if((PisRevolving(otherState) == 2 - op) && (mathVecInner(&otherState[3], difference, 3) < (0.9 * mathVecMagnitude(&otherState[3], 3))))
 		{
 		  if(switchTimer < 5 && switchTimer >= 0)
 		    {
@@ -164,29 +150,41 @@ void ZRUser01(float *myState, float *otherState, float time)
 					  
 
 
-	  if (mathVecMagnitude(difference, 3) < 0.6) {
+	  if (mathVecMagnitude(difference, 3) < (0.5 + gotToTangent/10))
+        {
+        gotToTangent = 1;
 	    theta = atan2f(difference[1],difference[0]);
 	    thetastep = 0.070996444 * ((SphereNumber * 2) - 3); // TAU / 88.5, zach's magic value
 	    theta += thetastep;
-	    difference[0] = .45 * sinf(PI/2 - theta);
+	    difference[0] = .45 * cosf(theta);
 	    difference[1] = .45 * sinf(theta);
 	    mathVecAdd(target, Asteroid, difference, 3); // target is new position 
 	    mathVecSubtract(difference, target, myState, 3); // difference points from myState to target 
 	    ZRSetVelocityTarget(difference); 
-	  }
-	  else { // go to tangent point in beginning of orbit
-	    // TODO: re-calculate tangent point
-	    opulens_tangent[0] *= (SphereNumber == 1) ? 1 : -1; // stay on our starting side
-        opulens_tangent[1] *= (op) ? 1 : -1;
-	    ZRSetPositionTarget(opulens_tangent);
-	  }				  
+	    }
+      else
+        {
+        mathVecSubtract(difference, myState, Asteroid, 3);
+        dist = mathVecMagnitude(difference, 3);
+        
+        theta = asinf(.45/dist);
+        tandist = sqrt(dist*dist - .45*.45);
+        xangle = atan2f(Asteroid[1] - myState[1], Asteroid[0] - myState[0]);
+
+        theta *= ((SphereNumber * (-2)) + 3);
+        
+        opulens_tangent[0] = myState[0] + (tandist * cosf(theta + xangle));
+        opulens_tangent[1] = myState[1] + (tandist * sinf(theta + xangle));
+        opulens_tangent[2] = 0;
+        ZRSetPositionTarget(opulens_tangent);
+        }
 	}
       else
 	{
 	  if(!cooloff)
 	    {
-	      mathVecSubtract(temp, otherState, Asteroid, 3);
-	      if((PinAsteroid(otherState) == 2 - op) || ((mathVecMagnitude(temp, 3) < .2) && (fabsf(otherState[11]) > PI/12)))
+	      mathVecSubtract(difference, otherState, Asteroid, 3);
+	      if((PinAsteroid(otherState) == 2 - op) || ((mathVecMagnitude(difference, 3) < .2)))
 		{
 		  if(switchTimer < 15 && switchTimer >= 10)
 		    {
@@ -212,7 +210,7 @@ void ZRUser01(float *myState, float *otherState, float time)
 	    }
 
 	  dirs[2] = 1.872459067 + atan2f(myState[7], myState[6]);
-	  dirs[0] = sinf(PI/2 - dirs[2]);
+	  dirs[0] = cosf(dirs[2]);
 	  dirs[1] = sinf(dirs[2]);
 	  dirs[2] = 0;
 						
@@ -221,32 +219,7 @@ void ZRUser01(float *myState, float *otherState, float time)
 	  ZRSetPositionTarget(Asteroid);
       
 	}
-      break;
-    default:
-      mathVecSubtract(target, Station, myState, 3);
-      
-      dist = mathVecMagnitude(target, 3);
-      
-      if(dist < .19)
-          mag = (mathVecMagnitude(&myState[3], 3) > 0.01) ? 0.002 : 0.01;
-      else if(dist < 0.33)
-          mag = dist/14;
-      else{
-          //mathVecCross(temp, difference, &myState[3]);
-          //mag = mathVecMagnitude(difference, 3)*3.141592/(45*mathVecMagnitude(temp, 3));
-          mag = .10;
-      }
-      
-      mag = (mag > dist/8.5) ? dist/8.5 : mag;
-      mag = (mag > 0.10) ? 0.10 : mag;
-      
-      mathVecNormalize(target, 3);
-      
-      target[0] *= mag;
-      target[1] *= mag;
-      
-      ZRSetVelocityTarget(target);
-    }
+}
 //END::PROC::ZRUser
 }
 void ZRInit01()
@@ -257,10 +230,12 @@ SphereNumber = 0;
 action = 1;
 switchTimer = 0;
 cooloff = 0;
-memset(Station,0,sizeof(float)*3);
 memset(Asteroid,0,sizeof(float)*3);
-switchedStation = 0;
 op = 1;
+y0received = 0;
+lastMessage = 0;
+gotToTangent = 0;
+memset(Station,0,sizeof(float)*3);
 //END::PROC::ZRInit
 }
 //User-defined procedures
