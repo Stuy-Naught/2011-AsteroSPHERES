@@ -31,7 +31,6 @@ void ZRUser01(float *myState, float *otherState, float time)
 #define dirs        Laser
 
   float opulens[3] = {0.0, -0.6, 0.0};
-  float opulens_tangent[3] = {0.45, -0.6, 0.0};
   float opulens_spin_point[3] = {0.04, -0.6, 0.0};
   float Laser[3] = {0.4, 0.0, 0.0};
   float difference[3], target[3];
@@ -156,7 +155,7 @@ else{
 	    theta = atan2f(difference[1],difference[0]);
 	    thetastep = 0.070996444 * ((SphereNumber * 2) - 3); // TAU / 88.5, zach's magic value
 	    theta += thetastep;
-	    difference[0] = .45 * cosf(theta);
+	    difference[0] = .45 * sinf(PI/2 - theta);
 	    difference[1] = .45 * sinf(theta);
 	    mathVecAdd(target, Asteroid, difference, 3); // target is new position 
 	    mathVecSubtract(difference, target, myState, 3); // difference points from myState to target 
@@ -167,16 +166,17 @@ else{
         mathVecSubtract(difference, myState, Asteroid, 3);
         dist = mathVecMagnitude(difference, 3);
         
-        theta = asinf(.45/dist);
-        tandist = sqrt(dist*dist - .45*.45);
+        tandist = sqrt(dist*dist - 0.2025);
+        theta = acos(tandist/dist);
+        
         xangle = atan2f(Asteroid[1] - myState[1], Asteroid[0] - myState[0]);
 
         theta *= ((SphereNumber * (-2)) + 3);
         
-        opulens_tangent[0] = myState[0] + (tandist * cosf(theta + xangle));
-        opulens_tangent[1] = myState[1] + (tandist * sinf(theta + xangle));
-        opulens_tangent[2] = 0;
-        ZRSetPositionTarget(opulens_tangent);
+        target[0] = myState[0] + (tandist * sinf(PI/2 - theta - xangle));
+        target[1] = myState[1] + (tandist * sinf(theta + xangle));
+        target[2] = 0;
+        ZRSetPositionTarget(target);
         }
 	}
       else
@@ -184,7 +184,7 @@ else{
 	  if(!cooloff)
 	    {
 	      mathVecSubtract(difference, otherState, Asteroid, 3);
-	      if((PinAsteroid(otherState) == 2 - op) || ((mathVecMagnitude(difference, 3) < .2)))
+	      if(!(PisRevolving(otherState) == 2 - op))
 		{
 		  if(switchTimer < 15 && switchTimer >= 10)
 		    {
@@ -210,7 +210,7 @@ else{
 	    }
 
 	  dirs[2] = 1.872459067 + atan2f(myState[7], myState[6]);
-	  dirs[0] = cosf(dirs[2]);
+	  dirs[0] = sinf(PI/2 - dirs[2]);
 	  dirs[1] = sinf(dirs[2]);
 	  dirs[2] = 0;
 						
